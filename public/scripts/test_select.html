@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+  <script type="text/javascript" src="jquery.js"></script>
+	<title>二重选择</title>
+</head>
+<body>
+<div style= 'font-size: 20px;'><b>台站类型</b></div>
+    <select id='system' onchange="change(this.value)" style="width:120px;height:35px;vertical-align:middle">
+      <option value="GSM">GSM</option>
+      <option value="WCDMA">WCDMA</option>
+      <option value="CDMA-2000">CDMA-2000</option>
+      <option value="TD-SCDMA">TD-SCDMA</option>
+      <option value="LTE">LTE</option>
+    </select>
+    <select id="frequency" style="width:120px;height:35px;vertical-align:middle"></select><br>
+
+    <input id="attrQuery" type="submit"  value="确定" style="width:60px;height:35px;vertical-align:middle"/><br>
+</div>
+</body>
+<script type="text/javascript">
+  $("#attrQuery").click(function(){
+    alert(typeof $("#frequency").val());
+  });
+  var data = [[101,102,103,104],[201,202,203,204],[301,302,303,304],[401,402,403,404],[501,502,503,504]];
+	function change(type){
+		switch(type){
+			case "GSM":
+        renderOptions(data[0]);
+        break;
+      case "WCDMA":
+        renderOptions(data[1]);
+        break;
+      case "CDMA-2000":
+        renderOptions(data[2]);
+        break;
+      case "TD-SCDMA":
+        renderOptions(data[3]);
+        break;
+      case "LTE":
+        renderOptions(data[4]);
+        break;
+		} 
+	}
+  window.onload = function(){
+    renderOptions(data[0]);
+  };
+  function renderOptions(attrFreq){
+    $("#frequency").empty(); 
+    for(var i=0;i<attrFreq.length;i++){
+      var option = $("<option>").val(attrFreq[i]).text(attrFreq[i]);
+      $("#frequency").append(option);
+    }
+  }
+</script>
+</html>

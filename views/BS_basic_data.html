@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ePlQjifGzLVBwH9Il3LqAhsHfX14cXOd"></script>
+  <!--加载鼠标绘制工具-->
+  <script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
+  <link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
+	<link rel="stylesheet" media="screen" href="css/layout.css"/>
+	<link rel="stylesheet" media="screen" href="css/style.css"/>
+ 
+  <title>台站基本信息表</title>
+</head>
+<body>
+  <!-- 公共头部 -->
+<div id="head"></div>
+<!-- 左侧菜单栏设置 -->
+<div id="leftMenu">
+    <b style= 'font-size: 30px;'>台站筛选选项</b><br>
+    <div style= 'font-size: 20px;'><b>台站中心频率范围</b></div>
+    <input type="text" style="width:40px;height:20px;vertical-align:middle;" id="fl" placeholder="1000"/>MHz 至 
+    <input type="text" style="width:40px;height:20px;vertical-align:middle" id="fh" placeholder="2500"/>MHz<br>
+
+    <div style= 'font-size: 20px;'><b>台站使用起始日期范围</b></div>
+    <input type="date" style="width:65px;height:20px;vertical-align:middle" id="dl" placeholder="2010/01/01"/>至 
+    <input type="date" style="width:65px;height:20px;vertical-align:middle" id="dh" placeholder="2012/12/31"/><br>
+
+    <div style= 'font-size: 20px;'><b>台站类型</b></div>
+    <select id='system'  style="width:120px;height:35px;vertical-align:middle">
+      <option value="All">全部</option>
+      <option value="CDMA-2000">CDMA-2000</option>
+      <option value="TD-SCDMA">TD-SCDMA</option>
+      <option value="LTE">LTE</option>
+      <option value="WCDMA">WCDMA</option>
+      <option value="GSM">GSM</option>
+    </select><br>
+
+    <input id="attrQuery" type="submit"  value="确定" style="width:60px;height:35px;vertical-align:middle"/><br>
+</div>
+
+<div id="allmap"></div>
+
+<!-- 信息弹框设置 -->
+<div id="tabMessage" >
+	<div id='shut'></div>
+	<b>台站信息展示</b>
+	<div id="tab"> 
+    <!-- 选项卡 -->
+		  <h3 class="active">台站信息</h3>
+      <h3>频率信息</h3>
+      <h3>其他</h3>
+
+      <div name="tag" class="content">台站信息</div>
+      <div  name="tag" >
+        <p>频率信息</p>
+        <!-- echarts绘图 -->
+        <div id='echarts' style='width:500px;height:400px;'></div>
+      </div>
+      <div name="tag">其他</div>  
+  </div>
+</div>
+<!-- 公共尾部 -->
+<div id="end"></div>
+<script>
+/*地图显示设置*/
+  var map = new BMap.Map("allmap");
+  var point = new BMap.Point(116.385,39.235);
+  map.centerAndZoom(point, 15);
+  map.enableScrollWheelZoom(true);
+  var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); //右上角，添加默认缩放平移控件     
+  map.addControl(top_right_navigation); 
+  var oldMarker;
+	
+</script>
+<script type="text/javascript" src="scripts/jquery.js"></script>
+<script type="text/javascript" src="scripts/echarts.min.js"></script>
+<script type="text/javascript" src="scripts/addLoadEvent.js"></script>
+<script type="text/javascript" src="scripts/tabMessage.js"></script>
+<!-- <script type="text/javascript" src="scripts/leftMenu.js"></script> -->
+<script type="text/javascript" src="scripts/getdata.js"></script>
+<script type="text/javascript" src="scripts/drawPoints.js"></script>
+<script type="text/javascript" src="scripts/drawTangle.js"></script>
+<script type="text/javascript" src="scripts/attachEvent.js"></script>
+</body>
+</html>

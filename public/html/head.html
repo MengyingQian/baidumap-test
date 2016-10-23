@@ -1,0 +1,65 @@
+<div id="banner">
+        <h1>宽带无线通信业务评估分析与展示系统</h1>
+        <h2>2016-7-19</h2>
+</div>
+<ul id="nav" class="clearfix">
+    <li >
+        <a class="SiteClass" href="#">台站展示</a>
+        <ul>
+            <li>
+                <a  class="all" href="BS_basic_data">台站基本信息表</a>
+            </li>
+            <li>
+                <a  class="er" href="query_near_BS">查询临近台站</a>
+            </li>
+        </ul>
+    </li>
+    <li >
+        <a class="Border" href="#">业务展示</a>
+        <ul>
+            <li>
+                <a  class="all" href="map_rectangle">栅格业务量展示</a>
+            </li>
+            <li>
+                <a  class="er" href="resource_rate">资源利用率</a>
+            </li>
+        </ul>
+    </li>
+    <li >
+        <a class="Border" href="#">业务分析</a>
+        <ul>
+            <li>
+                <a  class="all" href="hot_map">覆盖分析</a>
+            </li>
+            <li>
+                <a  class="er" href="interference">干扰分析</a>
+            </li>
+        </ul>
+    </li>
+    <li >
+        <a class="SiteClass" href="#">网络布局</a>
+        <ul>
+            <li>
+                <a  class="all" href="network_layout">网络布局</a>
+            </li>
+        </ul>
+    </li>
+    <li class="hover"></li>
+</ul>
+<script>
+//更改标题日期
+var myDate = new Date();
+var nowTime = myDate.toLocaleDateString().split(/\//).join('-');
+//console.log(nowTime);
+$('#banner>h2').text(nowTime);
+
+/*var aUl = $('#nav ul');
+var hover = $('.hover');
+for(var i=0;i<aUl.length;i++){
+    $(aUl[i]).find('a').click(function(){
+            hover.css('margin-left',index*180+'px');
+        });
+}
+*/
+
+</script>

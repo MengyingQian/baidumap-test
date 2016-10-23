@@ -1,0 +1,226 @@
+/* GLOBAL STYLES
+-------------------------------------------------- */
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre,
+form, fieldset, input, textarea, p, blockquote, th, td {
+    padding: 0;
+    margin: 0;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+fieldset, img {
+    border: 0;
+}
+
+address, caption, cite, code, dfn, em, strong, th, var {
+    font-weight: normal;
+    font-style: normal;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+caption, th {
+    text-align: left;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+    font-size: 100%;
+}
+
+q:before, q:after {
+    content: '';
+}
+
+abbr, acronym {
+    border: 0;
+    font-variant: normal;
+}
+
+a {
+    text-decoration: none;
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.clearfix {
+    display: inline-block;
+}
+
+html .clearfix {
+    height: 1%;
+}
+
+.clearfix {
+    display: block;
+}
+
+/* End hide from IE-mac */
+
+/* CUSTOMIZE THE LAYOUT
+-------------------------------------------------- */
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: "Helvetica", "Arial", "FreeSans", "Verdana", "Tahoma", "Lucida Sans", "Lucida Sans Unicode", "Luxi Sans", sans-serif;
+    overflow: hidden;
+}
+
+#head {
+    position: absolute;
+    background-color:white;
+    left: 0px;
+    top: 0px;
+    z-index: 1000;
+    height: 112px;
+    width: 100%;
+}
+
+
+/* CUSTOMIZE THE head
+-------------------------------------------------- */
+#banner {
+    height: 80px;
+    text-align: center;
+}
+
+#banner h1 {
+    color: #000000;
+    padding: 15px 0 10px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+#banner h2 {
+    color: #E70000;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#nav {
+    position: relative;
+    left:0;
+    z-index:3;
+    background-color: #fff;
+    box-shadow: 0 0 10px #E7E6E6;
+    -webkit-box-shadow: 0 0 8px #E7E6E6;
+    -moz-box-shadow: 0 0 8px #E7E6E6;
+    border-top: 1px solid #ebebeb;
+    border-bottom: 1px solid #ebebeb;
+}
+
+#nav li {
+    float: left;
+    width: 180px;
+    height: 30px;
+    text-align: center;
+    cursor: pointer;
+}
+
+#nav li a {
+    position: relative;
+    z-index: 10;
+    display: block;
+    width: 180px;
+    left: 0;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 30px;
+    color: #555353;
+}
+
+#nav li ul {
+    opacity: 0;
+    visibility: hidden;
+    background-color: #D0E9FF;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    -webkit-transition: opacity .5s ease-in-out;
+    -moz-transition: opacity .5s ease-in-out;
+    transition: opacity .5s ease-in-out;
+}
+
+#nav li ul li {
+    float: none;
+}
+
+#nav li ul li a {
+    font-size: 13px;
+}
+
+#nav li ul li:hover {
+    background-color: #8ECDFF;
+}
+
+/*#nav li.active {
+    background-color: #8ECDFF;
+}*/
+
+#nav li:hover>ul {
+    opacity: 1;
+    visibility: visible;
+}
+
+.hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 34px;
+    width: 180px;
+    margin-left: 0px;/*默认选择第一个选项卡bug在此*/
+    background-color: #8ECDFF;
+    -webkit-transition: margin-left .3s;
+    -moz-transition: margin-left .3s;
+    transition: margin-left .3s;
+}
+
+
+#nav li:nth-child(1):hover~.hover {
+    margin-left: 0;
+}
+
+#nav li:nth-child(2):hover~.hover {
+    margin-left: 180px;
+}
+
+#nav li:nth-child(3):hover~.hover {
+    margin-left: 360px;
+}
+#nav li:nth-child(4):hover~.hover {
+    margin-left: 540px;
+}
+div.resource_rate .hover{
+    margin-left: 180px;/*默认选择第一个选项卡bug在此*/
+}
+div.map_rectangle .hover{
+    margin-left: 180px;/*默认选择第一个选项卡bug在此*/
+}
+div.interference .hover{
+    margin-left: 360px;/*默认选择第一个选项卡bug在此*/
+}
+div.hot_map .hover{
+    margin-left: 360px;/*默认选择第一个选项卡bug在此*/
+}
+div.network_layout .hover{
+    margin-left: 540px;/*默认选择第一个选项卡bug在此*/
+}
+#end {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    z-index: 10000;
+    color: #000;
+    font-size: 12px;
+}
+/*-----------------------------------------*/
