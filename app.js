@@ -60,7 +60,7 @@ app.post('/interference',function(req,res){
 					};
 		})
 	})
-	.then(matlab.MATLAB_NIBS)
+	.then(matlab.MATLAB_interference)
 	.then(function(data){res.send(data);console.log('send');})
 	.catch(function (reason) {res.end();console.log('失败：' + reason);})
 	.finally(function(){res.end();console.log('finally');});
