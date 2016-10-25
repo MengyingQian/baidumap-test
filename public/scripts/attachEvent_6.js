@@ -42,7 +42,7 @@ $('#hotMap').click(function(){
 	//console.log(bssw);
 	//遍历地图设置查询点
 	var points = [];
-	for(var i=0;i<50;i++){
+	for(var i=0;i<10;i++){
 		for(var j=0;j<20;j++){
 			points.push([bssw.lng+minLng*i,bssw.lat+minLat*j]);
 		}
@@ -56,7 +56,7 @@ $('#hotMap').click(function(){
 			startGeom:[bssw.lng,bssw.lat],
 			endGeom:[bsne.lng,bsne.lat],
 			minGeom:[minLng,minLat],
-			//number : 6//取临近6个台站点
+			number : 1//取临近6个台站点
 		},				
 		props : []
 	};

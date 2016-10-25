@@ -54,7 +54,7 @@ app.post('/interference',function(req,res){
 		var t1 = new Date().getTime();
 		return query.NIBS(data,req.body.refer_2,0)
 		.then(function(data1){
-			console.log('near查询 '+Date.now()-t1);
+			console.log(Date.now()-t1);
 			return  {
 						station1 : data,
 						station2 : data1
@@ -77,17 +77,29 @@ app.post('/hotMap',function(req,res){
 		delete condition.minGeom;
 		console.log(startGeom);
 		console.log(endGeom);
+		//test
+		var points = [];
+		for(var i=0;i<10;i++){
+			for(var j=0;j<20;j++){
+				points.push([startGeom[0]+minGeom[0]*i,startGeom[1]+minGeom[1]*j]);
+			}
+		}
+		//test
+		console.log(points.length);
+		return points;
+	})(req.body.refer)
+	.then(function(points){
 		var t1 = new Date().getTime();
-		return query.NBS(startGeom,minGeom,startGeom[0],endGeom,condition)
+		//return query.NBS(startGeom,minGeom,startGeom[0],endGeom,condition)
+		return query.NBS(points,req.body.refer,0)
 		.then(function(data1){
-			console.log('near查询 '+Date.now()-t1);
+			console.log(Date.now()-t1);
 			console.log(data1.length);
 			return  {
 						station1 : data,
 						station2 : data1
 					};
-		})
-	})(req.body.refer)
+		})})
 	.then(function(data){res.send('success');console.log('send');})
 	.catch(function (reason) {res.end();console.log('失败：' + reason);})
 	.finally(function(){res.end();console.log('finally');});
@@ -100,7 +112,7 @@ app.post('/layout',function(req,res){
 		var t1 = new Date().getTime();
 		return query.NIBS(data,req.body.refer_2,0)
 		.then(function(data1){
-			console.log('near查询 '+Date.now()-t1);
+			console.log(Date.now()-t1);
 			return  {
 						station1 : data,
 						station2 : data1
