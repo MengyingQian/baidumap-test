@@ -51,9 +51,10 @@ app.post('/interference',function(req,res){
 	tt.attrQuery(req.body.refer,req.body.props||[])
 	.then(function(data){
 		//console.log(data[0]["业务时间"]);
+		var t1 = new Date().getTime();
 		return query.NIBS(data,req.body.refer_2,0)
 		.then(function(data1){
-			//console.log(data1[data1.length-1][0]);
+			console.log('near查询 '+Date.now()-t1);
 			return  {
 						station1 : data,
 						station2 : data1
@@ -67,15 +68,39 @@ app.post('/interference',function(req,res){
 });
 //热力图请求
 app.post('/hotMap',function(req,res){
-
+	(function(condition){
+		var startGeom = [parseFloat(condition.startGeom[0]),parseFloat(condition.startGeom[1])];
+		delete condition.startGeom;
+		var endGeom = [parseFloat(condition.endGeom[0]),parseFloat(condition.endGeom[1])];
+		delete condition.endGeom;
+		var minGeom = [parseFloat(condition.minGeom[0]),parseFloat(condition.minGeom[1])];
+		delete condition.minGeom;
+		console.log(startGeom);
+		console.log(endGeom);
+		var t1 = new Date().getTime();
+		return query.NBS(startGeom,minGeom,startGeom[0],endGeom,condition)
+		.then(function(data1){
+			console.log('near查询 '+Date.now()-t1);
+			console.log(data1.length);
+			return  {
+						station1 : data,
+						station2 : data1
+					};
+		})
+	})(req.body.refer)
+	.then(function(data){res.send('success');console.log('send');})
+	.catch(function (reason) {res.end();console.log('失败：' + reason);})
+	.finally(function(){res.end();console.log('finally');});
 });
 //网络布局请求
 app.post('/layout',function(req,res){
 	tt.attrQuery(req.body.refer,req.body.props||[])
 	.then(function(data){
 		//console.log(data[0]["业务时间"]);
+		var t1 = new Date().getTime();
 		return query.NIBS(data,req.body.refer_2,0)
 		.then(function(data1){
+			console.log('near查询 '+Date.now()-t1);
 			return  {
 						station1 : data,
 						station2 : data1

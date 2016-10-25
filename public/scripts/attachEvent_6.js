@@ -37,7 +37,7 @@ $('#hotMap').click(function(){
 	var bsne = bs.getNorthEast();   //可视区域右上角
 /*	var minLng = 0.0117;//每公里经纬度变化量
 	var minLat = 0.009;*/
-	var minLng = parseFloat(bs.toSpan().lng/50);//网格经度変化
+	var minLng = parseFloat(bs.toSpan().lng/10);//网格经度変化
 	var minLat = parseFloat(bs.toSpan().lat/20);//网格纬度变化
 	//console.log(bssw);
 	//遍历地图设置查询点
@@ -53,15 +53,17 @@ $('#hotMap').click(function(){
 			'运营商类型':corporation,
 			'制式类型':system,	
 			'业务时间':{"$gt":Maxtime.split('-')[0],"$lt":Maxtime.split('-')[1]},
-			searchBox:[bssw.lng,bssw.lat,bsne.lng,bsne.lat]
-		},
-		points:points,					
+			startGeom:[bssw.lng,bssw.lat],
+			endGeom:[bsne.lng,bsne.lat],
+			minGeom:[minLng,minLat],
+			//number : 6//取临近6个台站点
+		},				
 		props : []
 	};
 					
 	console.log(condition);
 	/*查询及后续promise操作*/
-//	getdata('/interference',condition).then(function(dbdata){remove_overlay();drawpoint(dbdata,addMarker);setAttrQueryMessage(dbdata);});
+	getdata('/hotMap',condition).then(function(dbdata){remove_overlay();drawpoint(dbdata,addMarker);setAttrQueryMessage(dbdata);});
 });
 
 /*信息弹框关闭按钮触发*/
