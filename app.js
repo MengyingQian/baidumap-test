@@ -52,7 +52,7 @@ app.post('/interference',function(req,res){
 	.then(function(data){
 		//console.log(data[0]["业务时间"]);
 		var t1 = new Date().getTime();
-		return query.NIBS(data,req.body.refer_2,0)
+		return query.NIBS(data,req.body.refer_2,data.length-1)
 		.then(function(data1){
 			console.log(Date.now()-t1);
 			return  {
@@ -81,17 +81,14 @@ app.post('/hotMap',function(req,res){
 		var points = [];
 		for(var i=0;i<10;i++){
 			for(var j=0;j<20;j++){
-				points.push([startGeom[0]+minGeom[0]*i,startGeom[1]+minGeom[1]*j]);
+				points[i*20+j] = [startGeom[0]+minGeom[0]*i,startGeom[1]+minGeom[1]*j];
 			}
 		}
 		//test
-		console.log(points.length);
-		return points;
-	})(req.body.refer)
-	.then(function(points){
+		console.log(points[0]);
 		var t1 = new Date().getTime();
 		//return query.NBS(startGeom,minGeom,startGeom[0],endGeom,condition)
-		return query.NBS(points,req.body.refer,0)
+		return query.NBS(points,req.body.refer,points.length-1)
 		.then(function(data1){
 			console.log(Date.now()-t1);
 			console.log(data1.length);
@@ -99,7 +96,8 @@ app.post('/hotMap',function(req,res){
 						station1 : data,
 						station2 : data1
 					};
-		})})
+		})
+	})(req.body.refer)
 	.then(function(data){res.send('success');console.log('send');})
 	.catch(function (reason) {res.end();console.log('失败：' + reason);})
 	.finally(function(){res.end();console.log('finally');});
@@ -108,9 +106,9 @@ app.post('/hotMap',function(req,res){
 app.post('/layout',function(req,res){
 	tt.attrQuery(req.body.refer,req.body.props||[])
 	.then(function(data){
-		//console.log(data[0]["业务时间"]);
+		//console.log(data[0]);
 		var t1 = new Date().getTime();
-		return query.NIBS(data,req.body.refer_2,0)
+		return query.NIBS(data,req.body.refer_2,data.length-1)
 		.then(function(data1){
 			console.log(Date.now()-t1);
 			return  {

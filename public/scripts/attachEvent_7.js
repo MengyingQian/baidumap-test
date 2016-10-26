@@ -48,6 +48,7 @@ $('#layout').click(function(){
 			'载波频点(MHz)' : 0,//标识是否需要检测频率
 			'运营商类型' : corporation,
 			'制式类型' : system,
+			'业务时间':{"$gt":Maxtime.split('-')[0],"$lt":Maxtime.split('-')[1]},
 			number : 6//取临近6个台站点
 		}
 	};

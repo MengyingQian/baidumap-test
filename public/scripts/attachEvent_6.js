@@ -50,6 +50,7 @@ $('#hotMap').click(function(){
 	//查询条件设置
 	var condition = {
 		refer : {
+			'载波频点(MHz)' : 0,//标识是否需要检测频率
 			'运营商类型':corporation,
 			'制式类型':system,	
 			'业务时间':{"$gt":Maxtime.split('-')[0],"$lt":Maxtime.split('-')[1]},
