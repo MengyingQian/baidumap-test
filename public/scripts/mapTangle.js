@@ -116,8 +116,8 @@ var createTangle = function(startLng,startLat,endLng,endLat,systemData){
 		setMapTangleMessage(dbdata);
 	}); 
 	rectangle.addEventListener("rightclick", function() {  
-        	this.setFillColor();
-			this.setFillOpacity(0.1);  
+    	this.setFillColor();
+		this.setFillOpacity(0.1);  
     }); 
 	map.addOverlay(rectangle);//增加矩形
 	rectangle = null; //减少引用数，减少内存占用

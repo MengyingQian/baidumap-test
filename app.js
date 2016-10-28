@@ -51,10 +51,8 @@ app.post('/interference',function(req,res){
 	tt.attrQuery(req.body.refer,req.body.props||[])
 	.then(function(data){
 		//console.log(data[0]["业务时间"]);
-		var t1 = new Date().getTime();
 		return query.NIBS(data,req.body.refer_2,data.length-1)
 		.then(function(data1){
-			console.log(Date.now()-t1);
 			return  {
 						station1 : data,
 						station2 : data1
@@ -71,34 +69,30 @@ app.post('/hotMap',function(req,res){
 	(function(condition){
 		var startGeom = [parseFloat(condition.startGeom[0]),parseFloat(condition.startGeom[1])];
 		delete condition.startGeom;
+		console.log(startGeom);
 		var endGeom = [parseFloat(condition.endGeom[0]),parseFloat(condition.endGeom[1])];
 		delete condition.endGeom;
+		console.log(endGeom);
 		var minGeom = [parseFloat(condition.minGeom[0]),parseFloat(condition.minGeom[1])];
 		delete condition.minGeom;
-		console.log(startGeom);
-		console.log(endGeom);
-		//test
 		var points = [];
-		for(var i=0;i<10;i++){
-			for(var j=0;j<20;j++){
-				points[i*20+j] = [startGeom[0]+minGeom[0]*i,startGeom[1]+minGeom[1]*j];
+		var lng,lat;
+		for(var i=0;(lng=startGeom[0]+minGeom[0]*i)<endGeom[0];i++){
+			for(var j=0;(lat=startGeom[1]+minGeom[1]*j)<endGeom[1];j++){
+				points.push([lng,lat]);
 			}
 		}
-		//test
-		console.log(points[0]);
-		var t1 = new Date().getTime();
-		//return query.NBS(startGeom,minGeom,startGeom[0],endGeom,condition)
 		return query.NBS(points,req.body.refer,points.length-1)
 		.then(function(data1){
-			console.log(Date.now()-t1);
-			console.log(data1.length);
+			//console.log(data1.length);
 			return  {
-						station1 : data,
+						station1 : points,
 						station2 : data1
 					};
 		})
 	})(req.body.refer)
-	.then(function(data){res.send('success');console.log('send');})
+	.then(matlab.MATLAB_hotMap)
+	.then(function(data){res.send(data);console.log('send');})
 	.catch(function (reason) {res.end();console.log('失败：' + reason);})
 	.finally(function(){res.end();console.log('finally');});
 });
@@ -107,10 +101,8 @@ app.post('/layout',function(req,res){
 	tt.attrQuery(req.body.refer,req.body.props||[])
 	.then(function(data){
 		//console.log(data[0]);
-		var t1 = new Date().getTime();
 		return query.NIBS(data,req.body.refer_2,data.length-1)
 		.then(function(data1){
-			console.log(Date.now()-t1);
 			return  {
 						station1 : data,
 						station2 : data1
