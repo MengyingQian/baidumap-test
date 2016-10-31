@@ -59,7 +59,7 @@
 <div id="end"></div>
 <script>
 /*地图显示设置*/
-  var map = new BMap.Map("allmap");
+  var map = new BMap.Map("allmap",{enableMapClick:false});
   var point = new BMap.Point(106.76355,26.634111);
   map.centerAndZoom(point, 15);
   map.enableScrollWheelZoom(true);

@@ -82,9 +82,11 @@ app.post('/hotMap',function(req,res){
 				points.push([lng,lat]);
 			}
 		}
+		var t1 = new Date().getTime();
 		return query.NBS(points,req.body.refer,points.length-1)
 		.then(function(data1){
-			//console.log(data1.length);
+			console.log(Date.now()-t1);
+			console.log('数组长度'+data1.length);
 			return  {
 						station1 : points,
 						station2 : data1
