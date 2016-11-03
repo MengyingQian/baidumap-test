@@ -44,7 +44,7 @@ function createHotTangle(minLng,minLat,points){
 			new BMap.Point(points[i][0],points[i][1]+minLat),
 			new BMap.Point(points[i][0]+minLng,points[i][1]+minLat),
 			new BMap.Point(points[i][0]+minLng,points[i][1])
-		], {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
+		], {strokeColor:"white", strokeWeight:1, strokeOpacity:0});
 		//console.log(rectangle);
 		rectangle.setFillOpacity(0.5);
 		rectangle.setFillColor(setColor(points[i][2]));

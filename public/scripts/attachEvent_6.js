@@ -28,7 +28,7 @@ addLoadEvent(setTab);
 $('#hotMap').click(function(){
 	remove_overlay();
 	$('#shut').click();
-	hotMap();
+	hotMap_2();
 });
 
 /*信息弹框关闭按钮触发*/
