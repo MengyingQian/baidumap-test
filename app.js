@@ -66,33 +66,10 @@ app.post('/interference',function(req,res){
 });
 //热力图请求
 app.post('/hotMap',function(req,res){
-	(function(condition){
-		var startGeom = [parseFloat(condition.startGeom[0]),parseFloat(condition.startGeom[1])];
-		delete condition.startGeom;
-		console.log(startGeom);
-		var endGeom = [parseFloat(condition.endGeom[0]),parseFloat(condition.endGeom[1])];
-		delete condition.endGeom;
-		console.log(endGeom);
-		var minGeom = [parseFloat(condition.minGeom[0]),parseFloat(condition.minGeom[1])];
-		delete condition.minGeom;
-		var points = [];
-		var lng,lat;
-		for(var i=0;(lng=startGeom[0]+minGeom[0]*i)<endGeom[0];i++){
-			for(var j=0;(lat=startGeom[1]+minGeom[1]*j)<endGeom[1];j++){
-				points.push([lng,lat]);
-			}
-		}
-		var t1 = new Date().getTime();
-		return query.NBS(points,req.body.refer,points.length-1)
-		.then(function(data1){
-			console.log(Date.now()-t1);
-			console.log('数组长度'+data1.length);
-			return  {
-						station1 : points,
-						station2 : data1
-					};
-		})
-	})(req.body.refer)
+	tt.attrQuery(req.body.refer,req.body.props||[])
+	.then(function(data){
+		return query.NBS(data,req.body.searchBox);
+	})
 	.then(matlab.MATLAB_hotMap)
 	.then(function(data){res.send(data);console.log('send');})
 	.catch(function (reason) {res.end();console.log('失败：' + reason);})

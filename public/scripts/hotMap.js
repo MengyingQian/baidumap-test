@@ -10,58 +10,58 @@ function hotMap(){
 	var minLat = 0.009;*/
 	var startLng = bssw.lng;
 	var startLat = bssw.lat;
-	var minLng = parseFloat(bs.toSpan().lng/50);//网格经度変化
-	var minLat = parseFloat(bs.toSpan().lat/20);//网格纬度变化
+	var numLng = 10;//一公里包含的栅格数
+	var numLat = 10;
+	var minLng = 0.0117/numLng;//栅格大小为100m
+	var minLat = 0.009/numLat;
+	var n1 = parseInt((endLng-startLng)/minLng);
+	var n2 = parseInt((endLat-startLat)/minLat);
 	var endLng = bsne.lng;
 	//var endLat = startLat + minLat*2;//100个点
 	var endLat = bsne.lat;
 	//查询条件设置
-	while(endLat <= bsne.lat){
-		var condition = {
-			refer : {
-				'载波频点(MHz)' : 0,//标识是否需要检测频率
-				'运营商类型':corporation,
-				'制式类型':system,	
-				'业务时间':{"$gt":Maxtime.split('-')[0],"$lt":Maxtime.split('-')[1]},
-				startGeom:[startLng,startLat],
-				endGeom:[endLng,endLat],
-				minGeom:[minLng,minLat],
-				},				
-			props : []
-		};
-		/*查询及后续promise操作*/
-		getdata('/hotMap',condition).then(function(dbdata){createHotTangle(minLng,minLat,dbdata);});//使用闭包
-		startLat = endLat;
-		endLat =  startLat + minLat*2;
-	}
+	var condition = {
+		refer : {
+			'运营商类型':corporation,
+			'制式类型':system,	
+			'业务时间':{"$gt":Maxtime.split('-')[0],"$lt":Maxtime.split('-')[1]},
+			searchBox:[bssw.lng,bssw.lat,bsne.lng,bsne.lat]
+			},	
+		searchBox:[bssw.lng,bssw.lat,bsne.lng,bsne.lat],		
+		props : []
+	};
+	/*查询及后续promise操作*/
+	getdata('/hotMap',condition).then(function(dbdata){createHotTangle(minLng,minLat,dbdata);});//使用闭包
 }
 //闭包函数
 //下一步任务，查看覆盖物类polygon
 function createHotTangle(minLng,minLat,points){
 	for(var i=0;i<points.length;i++){
+		var color = setColor(points[i][2]);
 		var rectangle = new BMap.Polygon([
 			new BMap.Point(points[i][0],points[i][1]),
 			new BMap.Point(points[i][0],points[i][1]+minLat),
 			new BMap.Point(points[i][0]+minLng,points[i][1]+minLat),
 			new BMap.Point(points[i][0]+minLng,points[i][1])
-		], {strokeColor:"white", strokeWeight:1, strokeOpacity:0});
+		], {strokeColor:'white', strokeWeight:0.001, strokeOpacity:0});
 		//console.log(rectangle);
 		rectangle.setFillOpacity(0.5);
-		rectangle.setFillColor(setColor(points[i][2]));
+		rectangle.setFillColor(color); 
 		rectangle.addEventListener("click", function(){
 			if(oldTangle) {
-				oldTangle.setFillColor("#FFFFFF");
-				oldTangle.setFillOpacity(0.1);
+				oldTangle.setFillColor(oldColor);
+				oldTangle.setFillOpacity(0.5);
 			}
 			oldTangle = this;
+			oldColor = this.getFillColor();
 			this.setFillColor("#00BFFF");
-			this.setFillOpacity(0.5);
+			this.setFillOpacity(0.1);
 			//setMapTangleMessage(1);
 		}); 
 		rectangle.addEventListener("rightclick", function() {  
-	    	this.setFillColor();
-			this.setFillOpacity(0.1);  
-	    }); 
+	    	this.setFillColor(oldColor);
+			this.setFillOpacity(0.5);  
+	    });
 		map.addOverlay(rectangle);//增加矩形
 		rectangle = null; //减少引用数，减少内存占用
 	}
@@ -69,15 +69,21 @@ function createHotTangle(minLng,minLat,points){
 
 //由绿到红的渐变色值,百分比 value 取值 1...100  
 function setColor(value){
-	//var 百分之一 = (单色值范围) / 50;  单颜色的变化范围只在50%之内  
+	//最大值为100，防止过大出现错误\
+	value = parseInt(value);
+	if(value!=0) value += 120;
+	if(value > 100) value = 100; 
+	if(value < 0) value = 0; 
+	//console.log(value);
+	//var 百分之一 = (单色值范围) / 50;  单颜色的变化范围只在50%之内 
     var one = (255+255) / 100;    
     var r=0;  
     var g=0;  
     var b=0;  
     if ( value < 50 ) {   
         // 比例小于50的时候红色是越来越多的,直到红色为255时(红+绿)变为黄色.  
-        r = one * value;  
-        g=255;  
+        r = one * value; 
+        g=255; 
     }  
     if ( value >= 50 ) {  
         // 比例大于50的时候绿色是越来越少的,直到0 变为纯红  

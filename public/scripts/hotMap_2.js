@@ -11,8 +11,8 @@
 	var startLat = bssw.lat;
 	var endLng = bsne.lng;
 	var endLat = bsne.lat;
-	var n1 = 50;//经度轴方格数
-	var n2 = 20;//纬度轴方格数
+	var n1 = 100;//经度轴方格数
+	var n2 = 100;//纬度轴方格数
 	var minLng = parseFloat(bs.toSpan().lng/n1);//网格经度変化
 	var minLat = parseFloat(bs.toSpan().lat/n2);//网格纬度变化
 	var numLng = Math.ceil(0.0117/minLng);//向上取整
@@ -34,7 +34,7 @@
 		var length = data.length;
 		console.log('台站数目'+length);
 		var array = [];
-		var points = [];
+//		var points = [];
 		for(var i=0;i<n1*n2;i++){
 			array.push([]);
 		}
@@ -48,12 +48,13 @@
 		//生成所有的待查询点并查询
 		(function(){
 			for(var i=0;(lng=startLng+minLng*i)<endLng;i++){
+				var points = [];
 				var minX = (i-numLng<0)?0:(i-numLng);
 				var maxX = (i+numLng>n1)?n1:(i+numLng);
 				//console.log(i);
 				for(var j=0;(lat=startLat+minLat*j)<endLat;j++){
 					//console.log(j);
-					var distance = 1000;//初始化最远距离
+					var distance = 1;//初始化最远距离,单位公里
 					var BSpoint = new Object();
 					//查询临近基站
 					var minY = (j-numLat<0)?0:(j-numLat);
@@ -77,35 +78,36 @@
 						}
 					}
 					//计算该点接收功率
-					var power = Math.ceil(Math.random()*100);
+					var power = Math.ceil(Math.pow(1-distance,2)*100);
 					//检查BSpoint
 					points.push([lng,lat,power,BSpoint]);
 				}
+				createHotTangle(minLng,minLat,points);
 			}
 			console.log('最终长度'+points.length);
 			console.log(Date.now()-t1);
 		})();
-		createHotTangle(minLng,minLat,points);
 	});
 }
 function getLength(lng1,lat1,lng2,lat2){
-	var length1 = Math.abs(lng1-lng2)/0.0000117;
-	var length2 = Math.abs(lat1-lat2)/0.000009;
+	var length1 = Math.abs(lng1-lng2)/0.0117;//单位公里
+	var length2 = Math.abs(lat1-lat2)/0.009;
 	return  Math.sqrt(Math.pow(length1,2)+ Math.pow(length2,2));
 }
 //闭包函数
 //下一步任务，查看覆盖物类polygon
 function createHotTangle(minLng,minLat,points){
 	for(var i=0;i<points.length;i++){
+		var color = setColor(points[i][2]);
 		var rectangle = new BMap.Polygon([
 			new BMap.Point(points[i][0],points[i][1]),
 			new BMap.Point(points[i][0],points[i][1]+minLat),
 			new BMap.Point(points[i][0]+minLng,points[i][1]+minLat),
 			new BMap.Point(points[i][0]+minLng,points[i][1])
-		], {strokeColor:"white", strokeWeight:1, strokeOpacity:0.8});
+		], {strokeColor:'white', strokeWeight:0.001, strokeOpacity:0});
 		//console.log(rectangle);
 		rectangle.setFillOpacity(0.5);
-		rectangle.setFillColor(setColor(points[i][2])); 
+		rectangle.setFillColor(color); 
 		rectangle.addEventListener("click", function(){
 			if(oldTangle) {
 				oldTangle.setFillColor(oldColor);
@@ -128,6 +130,8 @@ function createHotTangle(minLng,minLat,points){
 
 //由绿到红的渐变色值,百分比 value 取值 1...100  
 function setColor(value){
+	//最大值为100，防止过大出现错误
+	if(value > 100) value = 100;
 	//var 百分之一 = (单色值范围) / 50;  单颜色的变化范围只在50%之内  
     var one = (255+255) / 100;    
     var r=0;  
