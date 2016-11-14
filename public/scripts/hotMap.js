@@ -10,15 +10,12 @@ function hotMap(){
 	var minLat = 0.009;*/
 	var startLng = bssw.lng;
 	var startLat = bssw.lat;
-	var numLng = 10;//一公里包含的栅格数
-	var numLat = 10;
-	var minLng = 0.0117/numLng;//栅格大小为100m
-	var minLat = 0.009/numLat;
-	var n1 = parseInt((endLng-startLng)/minLng);
-	var n2 = parseInt((endLat-startLat)/minLat);
 	var endLng = bsne.lng;
-	//var endLat = startLat + minLat*2;//100个点
 	var endLat = bsne.lat;
+	var recLength = 80;//单位栅格边长（m）
+	var minLng = 0.0000117*recLength;//单位栅格的经度跨度
+	var minLat = 0.000009*recLength;//单位栅格的纬度跨度
+
 	//查询条件设置
 	var condition = {
 		refer : {
@@ -26,8 +23,12 @@ function hotMap(){
 			'制式类型':system,	
 			'业务时间':{"$gt":Maxtime.split('-')[0],"$lt":Maxtime.split('-')[1]},
 			searchBox:[bssw.lng,bssw.lat,bsne.lng,bsne.lat]
-			},	
-		searchBox:[bssw.lng,bssw.lat,bsne.lng,bsne.lat],		
+		},	
+		searchBox:{
+			startPoint : [bssw.lng,bssw.lat],
+			endPoint : [bsne.lng,bsne.lat],
+			maxDistance : recLength
+		},		
 		props : []
 	};
 	/*查询及后续promise操作*/
