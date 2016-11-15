@@ -8,11 +8,12 @@ function hotMap(){
 	var bsne = bs.getNorthEast();   //可视区域右上角
 /*	var minLng = 0.0117;//每公里经纬度变化量
 	var minLat = 0.009;*/
-	var startLng = bssw.lng;
-	var startLat = bssw.lat;
-	var endLng = bsne.lng;
-	var endLat = bsne.lat;
-	var recLength = 80;//单位栅格边长（m）
+	var maxDistance = 1000;
+	var startLng = bssw.lng-0.0000117*maxDistance;//搜索区域，非显示区域
+	var startLat = bssw.lat-0.000009*maxDistance;
+	var endLng = bsne.lng+0.0000117*maxDistance;
+	var endLat = bsne.lat+0.000009*maxDistance;
+	var recLength = 100;//单位栅格边长（m）
 	var minLng = 0.0000117*recLength;//单位栅格的经度跨度
 	var minLat = 0.000009*recLength;//单位栅格的纬度跨度
 
@@ -22,12 +23,14 @@ function hotMap(){
 			'运营商类型':corporation,
 			'制式类型':system,	
 			'业务时间':{"$gt":Maxtime.split('-')[0],"$lt":Maxtime.split('-')[1]},
-			searchBox:[bssw.lng,bssw.lat,bsne.lng,bsne.lat]
+			//扩大搜索区域
+			searchBox:[startLng,startLat,endLng,endLat]
 		},	
 		searchBox:{
-			startPoint : [bssw.lng,bssw.lat],
-			endPoint : [bsne.lng,bsne.lat],
-			maxDistance : recLength
+			startPoint : [startLng,startLat],
+			endPoint : [endLng,endLat],
+			recLength : recLength,
+			maxDistance : maxDistance//单个点搜索范围
 		},		
 		props : []
 	};
@@ -57,7 +60,8 @@ function createHotTangle(minLng,minLat,points){
 			oldColor = this.getFillColor();
 			this.setFillColor("#00BFFF");
 			this.setFillOpacity(0.1);
-			//setMapTangleMessage(1);
+			//console.log(points[i]);
+			//setHotMapMessage(points[i]);
 		}); 
 		rectangle.addEventListener("rightclick", function() {  
 	    	this.setFillColor(oldColor);

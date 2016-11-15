@@ -97,10 +97,10 @@ function setDrawQueryMessage(data){
     //echarts绘图
     // 基于准备好的dom，初始化echarts实例
     $("div").remove('.echarts');
-    var createDiv = $('<div></div>');
-    createDiv.addclass('echarts');
-    $("#tab div[id='echarts']").append(createDiv);
-    var myChart = echarts.init(document.getElementsByClassName('echarts')[0]);
+    var createDiv = document.createElement('div');
+    createDiv.classList.add('echarts');
+    $("#tab div.echarts").append(createDiv);
+    var myChart = echarts.init(createDiv);
     // 指定图表的配置项和数据
     var number = [0,0,0,0,0];
     for(var i=0;i<data.length;i++){
@@ -207,6 +207,16 @@ function setMapTangleMessage(data){
   $('#tabMessage').show();
 };
 
+function setHotMapMessage(data){
+    var oTab = document.getElementById("tab");
+    var aDiv = document.getElementsByName("tag");
+    var content = "此处接收功率："+data[2]+"dbm"+"<br />";
+    //各选项卡内容设置
+    aDiv[0].innerHTML = content;
+    aDiv[1].getElementsByTagName("p")[0].innerHTML = "";
+    aDiv[2].innerHTML = "其他";
+    $('#tabMessage').show();
+}
 function arrAdd(arr1,arr2){
     if(arr1.length != arr2.length) {
         alert('数组长度不相等');
@@ -265,10 +275,10 @@ function resultMake(point){
 
 function echartsMake(xData,yData,abbr){
   // 基于准备好的dom，初始化echarts实例
-  var createDiv = $('<div></div>');
-  createDiv.addClass('echarts');
+  var createDiv = document.createElement('div');
+  createDiv.classList.add('echarts');
   $("#tab div#echarts").append(createDiv);
-  var myChart = echarts.init(document.getElementsByClassName('echarts')[$('div.echarts').length-1]);
+  var myChart = echarts.init(createDiv);
   //指定图表的配置项
   //console.log(time);
   var option = {
