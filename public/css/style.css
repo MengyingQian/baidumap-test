@@ -189,7 +189,6 @@ html, body {
 #nav li:nth-child(1):hover~.hover {
     margin-left: 0;
 }
-
 #nav li:nth-child(2):hover~.hover {
     margin-left: 180px;
 }
@@ -200,20 +199,23 @@ html, body {
 #nav li:nth-child(4):hover~.hover {
     margin-left: 540px;
 }
-div.resource_rate .hover{
-    margin-left: 180px;/*默认选择第一个选项卡bug在此*/
+#nav li:nth-child(5):hover~.hover {
+    margin-left: 720px;
 }
 div.map_rectangle .hover{
-    margin-left: 180px;/*默认选择第一个选项卡bug在此*/
+    margin-left: 0px;/*默认选择第一个选项卡bug在此*/
 }
-div.interference .hover{
-    margin-left: 360px;/*默认选择第一个选项卡bug在此*/
+div.resource_rate .hover{
+    margin-left: 180px;/*默认选择第一个选项卡bug在此*/
 }
 div.hot_map .hover{
     margin-left: 360px;/*默认选择第一个选项卡bug在此*/
 }
 div.network_layout .hover{
     margin-left: 540px;/*默认选择第一个选项卡bug在此*/
+}
+div.interference .hover{
+    margin-left: 720px;/*默认选择第一个选项卡bug在此*/
 }
 #end {
     position: absolute;

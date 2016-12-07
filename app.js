@@ -6,25 +6,17 @@ var tt = require('./lib/DBOperation');
 //var cmd = require('./lib/cmdOperation');
 var matlab = require('./lib/MATLAB');
 var query = require('./lib/querySet');
-var EventEmitter = require('events').EventEmitter;  
-var ee = new EventEmitter();
-//var routes = require('./routes');
-var path = require('path');
 var app = express();
 
-//定义发送文件扩展名
-app.engine('.html', require('ejs').__express);  
-app.set('view engine', 'html'); 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); 
-app.use(express.static(path.join(__dirname, 'public')));
-ee.setMaxListeners(20);//最大监听数目设置，0代表无穷
+app.use(express.static('public'));
 //运行mongodb数据库
 //cmd.startDB();
 
 //初始页面
 app.get('/',function(req,res){
-	res.render("BS_basic_data",{"layout":false});
+	res.sendFile(__dirname+"/views/map_rectangle.html");
 });
 //屏蔽错误请求
 app.get('/favicon.ico',function(req,res){
@@ -100,18 +92,7 @@ app.post('/aggregate',function(req,res){
 	.catch(function (reason) {res.end();console.log('失败：' + reason);})
 	.finally(function(){res.end();console.log('finally');});
 });
-//空间查询
-/*app.post('/drawQuery',function(req,res){
-	tt.drawQuery(req.body.refer,req.body.props||{})
-	.then(function(data){res.send(data);console.log('send');})
-	.finally(function(){console.log('finally');});
-});*/
-//邻域查询
-/*app.post('/nearQuery',function(req,res){
-	tt.nearQuery(req.body)
-	.then(function(data){res.send(data);console.log('send');})
-	.finally(function(){console.log('finally');});
-});*/
+
 //发送请求页面
 app.get('/:fileName',function(req,res){
 	res.sendFile(__dirname+'/views/'+req.params.fileName+'.html');
