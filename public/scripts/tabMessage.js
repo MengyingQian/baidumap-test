@@ -85,76 +85,6 @@ function setAttrQueryMessage(data){
     $('#tabMessage').show();
 };
 
-/*空间查询显示状态*/
-function setDrawQueryMessage(data){
-  	var oTab = document.getElementById("tab");
-  	var aDiv = document.getElementsByName("tag");
-  	var content = "框选共查询到"+data.length+"个台站"+"<br />";
-    //各选项卡内容设置
-  	aDiv[0].innerHTML = content;
-    aDiv[1].getElementsByTagName("p")[0].innerHTML = "";
-    aDiv[2].innerHTML = "其他";
-    //echarts绘图
-    // 基于准备好的dom，初始化echarts实例
-    $("div").remove('.echarts');
-    var createDiv = document.createElement('div');
-    createDiv.classList.add('echarts');
-    $("#tab div.echarts").append(createDiv);
-    var myChart = echarts.init(createDiv);
-    // 指定图表的配置项和数据
-    var number = [0,0,0,0,0];
-    for(var i=0;i<data.length;i++){
-    	switch(data[i]["系统类型"]){
-    		case "GSM":
-    			number[0]++;
-    			break;
-    		case "CDMA-2000":
-    			number[1]++;
-    			break;
-    		case "TD-SCDMA":
-    			number[2]++;
-    			break;
-    		case "WCDMA":
-    			number[3]++;
-    			break;
-    		case "LTE":
-    			number[4]++;
-    			break;
-    		default:
-    			alert(" The type is wrong");
-    	}
-    }
-    var option = {
-        title: {
-            text: '系统类型'
-        },
-        tooltip: {},
-        legend: {
-            data:['各类型数目']
-        },
-        xAxis: {
-        	axisLabel: {
-        		interval:0 ,
-				rotate: 30
-				},
-            data: ["GSM","CDMA-2000","TD-SCDMA","WCDMA","LTE"]
-        },
-        yAxis: {},
-        series: [{
-            name: '各类型数目',
-            type: 'bar',
-            data: number,
-            barWidth: '60%'
-            /*itemStyle: {
-            	barMaxWidth:
-        	}*/
-        }]
-    };
-    // 使用刚指定的配置项和数据显示图表。
-    myChart.setOption(option);
-    console.log(option);
-  $('#tabMessage').show();
-};
 /*地图栅格显示状态*/
 function setMapTangleMessage(data){
     var oTab = document.getElementById("tab");
@@ -210,10 +140,13 @@ function setMapTangleMessage(data){
 function setHotMapMessage(data){
     var oTab = document.getElementById("tab");
     var aDiv = document.getElementsByName("tag");
-    var content = "此处接收功率："+data[2]+"dbm"+"<br />";
+    var content = "测量点："+"<br />"+
+                  "经度："+data[0]+"<br />"+
+                  "纬度："+data[1]+"<br />"+
+                  "接收功率："+data[2]+"dbm"+"<br />";
     //各选项卡内容设置
     aDiv[0].innerHTML = content;
-    aDiv[1].getElementsByTagName("p")[0].innerHTML = "";
+    aDiv[1].getElementsByTagName("p")[0].innerHTML = "热力图";
     aDiv[2].innerHTML = "其他";
     $('#tabMessage').show();
 }
@@ -359,3 +292,73 @@ function echartsAbbr(name){
   }
   return abbr;
 }
+/*空间查询显示状态*/
+/*function setDrawQueryMessage(data){
+    var oTab = document.getElementById("tab");
+    var aDiv = document.getElementsByName("tag");
+    var content = "框选共查询到"+data.length+"个台站"+"<br />";
+    //各选项卡内容设置
+    aDiv[0].innerHTML = content;
+    aDiv[1].getElementsByTagName("p")[0].innerHTML = "";
+    aDiv[2].innerHTML = "其他";
+    //echarts绘图
+    // 基于准备好的dom，初始化echarts实例
+    $("div").remove('.echarts');
+    var createDiv = document.createElement('div');
+    createDiv.classList.add('echarts');
+    $("#tab div.echarts").append(createDiv);
+    var myChart = echarts.init(createDiv);
+    // 指定图表的配置项和数据
+    var number = [0,0,0,0,0];
+    for(var i=0;i<data.length;i++){
+      switch(data[i]["系统类型"]){
+        case "GSM":
+          number[0]++;
+          break;
+        case "CDMA-2000":
+          number[1]++;
+          break;
+        case "TD-SCDMA":
+          number[2]++;
+          break;
+        case "WCDMA":
+          number[3]++;
+          break;
+        case "LTE":
+          number[4]++;
+          break;
+        default:
+          alert(" The type is wrong");
+      }
+    }
+    var option = {
+        title: {
+            text: '系统类型'
+        },
+        tooltip: {},
+        legend: {
+            data:['各类型数目']
+        },
+        xAxis: {
+          axisLabel: {
+            interval:0 ,
+        rotate: 30
+        },
+            data: ["GSM","CDMA-2000","TD-SCDMA","WCDMA","LTE"]
+        },
+        yAxis: {},
+        series: [{
+            name: '各类型数目',
+            type: 'bar',
+            data: number,
+            barWidth: '60%'
+            itemStyle: {
+              barMaxWidth:
+            }
+        }]
+    };
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+    console.log(option);
+  $('#tabMessage').show();
+};*/

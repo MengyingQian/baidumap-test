@@ -8,7 +8,7 @@ function hotMap(){
 	var bsne = bs.getNorthEast();   //可视区域右上角
 /*	var minLng = 0.0117;//每公里经纬度变化量
 	var minLat = 0.009;*/
-	var maxDistance = 1000;
+	var maxDistance = 1000;//单个点搜索范围（m）
 	var startLng = bssw.lng-0.0000117*maxDistance;//搜索区域，非显示区域
 	var startLat = bssw.lat-0.000009*maxDistance;
 	var endLng = bsne.lng+0.0000117*maxDistance;
@@ -30,46 +30,47 @@ function hotMap(){
 			startPoint : [startLng,startLat],
 			endPoint : [endLng,endLat],
 			recLength : recLength,
-			maxDistance : maxDistance//单个点搜索范围
+			maxDistance : maxDistance
 		},		
 		props : []
 	};
 	/*查询及后续promise操作*/
-	getdata('/hotMap',condition).then(function(dbdata){createHotTangle(minLng,minLat,dbdata);});//使用闭包
+	getdata('/hotMap',condition).then(function(dbdata){
+		for(var i=0,len=dbdata.length;i<len;i++)
+			createHotTangle(minLng,minLat,dbdata[i]);
+	});//使用闭包
 }
 //闭包函数
 //下一步任务，查看覆盖物类polygon
-function createHotTangle(minLng,minLat,points){
-	for(var i=0;i<points.length;i++){
-		var color = setColor(points[i][2]);
-		var rectangle = new BMap.Polygon([
-			new BMap.Point(points[i][0],points[i][1]),
-			new BMap.Point(points[i][0],points[i][1]+minLat),
-			new BMap.Point(points[i][0]+minLng,points[i][1]+minLat),
-			new BMap.Point(points[i][0]+minLng,points[i][1])
-		], {strokeColor:'white', strokeWeight:0.001, strokeOpacity:0});
-		//console.log(rectangle);
-		rectangle.setFillOpacity(0.5);
-		rectangle.setFillColor(color); 
-		rectangle.addEventListener("click", function(){
-			if(oldTangle) {
-				oldTangle.setFillColor(oldColor);
-				oldTangle.setFillOpacity(0.5);
-			}
-			oldTangle = this;
-			oldColor = this.getFillColor();
-			this.setFillColor("#00BFFF");
-			this.setFillOpacity(0.1);
-			//console.log(points[i]);
-			//setHotMapMessage(points[i]);
-		}); 
-		rectangle.addEventListener("rightclick", function() {  
-	    	this.setFillColor(oldColor);
-			this.setFillOpacity(0.5);  
-	    });
-		map.addOverlay(rectangle);//增加矩形
-		rectangle = null; //减少引用数，减少内存占用
-	}
+function createHotTangle(minLng,minLat,point){
+	var color = setColor(point[2]);
+	var rectangle = new BMap.Polygon([
+		new BMap.Point(point[0],point[1]),
+		new BMap.Point(point[0],point[1]+minLat),
+		new BMap.Point(point[0]+minLng,point[1]+minLat),
+		new BMap.Point(point[0]+minLng,point[1])
+	], {strokeColor:'white', strokeWeight:0.001, strokeOpacity:0});
+	//console.log(rectangle);
+	rectangle.setFillOpacity(0.5);
+	rectangle.setFillColor(color); 
+	rectangle.addEventListener("click", function(){
+		if(oldTangle) {
+			oldTangle.setFillColor(oldColor);
+			oldTangle.setFillOpacity(0.5);
+		}
+		oldTangle = this;
+		oldColor = this.getFillColor();
+		this.setFillColor("#00BFFF");
+		this.setFillOpacity(0.1);
+		//console.log(point);
+		setHotMapMessage(point);
+	}); 
+	rectangle.addEventListener("rightclick", function() {  
+    	this.setFillColor(oldColor);
+		this.setFillOpacity(0.5);  
+    });
+	map.addOverlay(rectangle);//增加矩形
+	rectangle = null; //减少引用数，减少内存占用
 }
 
 //由绿到红的渐变色值,百分比 value 取值 1...100  

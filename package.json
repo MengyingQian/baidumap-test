@@ -6,8 +6,8 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "ejs": "*",
+    "body-parser": "^1.15.2",    "child_process": "1.0.2",
     "express": "3.4.8",
     "mongodb": "*"
-  }
+,    "q": "^1.4.1"}
 }

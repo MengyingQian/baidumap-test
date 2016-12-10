@@ -92,12 +92,22 @@ app.post('/aggregate',function(req,res){
 	.catch(function (reason) {res.end();console.log('失败：' + reason);})
 	.finally(function(){res.end();console.log('finally');});
 });
-
 //发送请求页面
 app.get('/:fileName',function(req,res){
 	res.sendFile(__dirname+'/views/'+req.params.fileName+'.html');
 });
 
+//捕捉系统异常，防止错误引发宕机
+/*process.on('uncaughtException', function(e) {
+　　console.log('uncaughtException'+e);
+});*/
+//错误处理
+app.use(function(err, req, res, next) {  
+    console.error(err.stack);  
+    res.status(404).send('Resource Not Found!');  
+    res.status(500).send('System Error!');  
+    next();  
+});
 //监听8080端口
 app.listen(8080, function(){
     console.log("Express server listening 8080");

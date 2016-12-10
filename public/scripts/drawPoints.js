@@ -61,6 +61,7 @@ function drawpoint(data,callback){
 var createMark = function(data,callback) {  
 	//设置标记样式
 	var color = parseInt(data['干扰系数']/0.1)||0;
+    if(color!=0) console.log(color);
 	//console.log(color);
 	var myIcon = new BMap.Icon("img/markers1.png", new BMap.Size(23, 25), {  
                     offset: new BMap.Size(10, 25), // 指定定位位置  
