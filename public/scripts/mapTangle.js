@@ -97,7 +97,7 @@ var createTangle = function(startLng,startLat,endLng,endLat,systemData){
 	//console.log(condition.refer);
 	var dbdata;
 	getdata('/attrQuery',condition)
-	.then(function(data){drawpoint(data);dbdata = data;});
+	.then(function(data){$('.loading').hide();drawpoint(data);dbdata = data;});
 	var rectangle = new BMap.Polygon([
 		new BMap.Point(startLng,startLat),
 		new BMap.Point(startLng,endLat),

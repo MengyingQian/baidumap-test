@@ -33,6 +33,7 @@ $('#shut').click(function(){
 	if(oldMarker) oldMarker.setAnimation();
 });
 $("#mapTangle").click(function(){
+	$('.loading').show();
 	remove_overlay();
 	$('#shut').click();
 	mapTangle();

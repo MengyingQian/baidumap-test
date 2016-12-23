@@ -6,6 +6,7 @@ function hotMap(){
 	var bs = map.getBounds();   //获取可视区域
 	var bssw = bs.getSouthWest();   //可视区域左下角
 	var bsne = bs.getNorthEast();   //可视区域右上角
+	var zoom = map.getZoom();//获取当前地图缩放等级
 /*	var minLng = 0.0117;//每公里经纬度变化量
 	var minLat = 0.009;*/
 	var maxDistance = 1000;//单个点搜索范围（m）
@@ -13,10 +14,10 @@ function hotMap(){
 	var startLat = bssw.lat-0.000009*maxDistance;
 	var endLng = bsne.lng+0.0000117*maxDistance;
 	var endLat = bsne.lat+0.000009*maxDistance;
-	var recLength = 100;//单位栅格边长（m）
+	var recLength = 12.5*Math.pow(2,18-zoom);//单位栅格边长（m）
+	//console.log(recLength);
 	var minLng = 0.0000117*recLength;//单位栅格的经度跨度
 	var minLat = 0.000009*recLength;//单位栅格的纬度跨度
-
 	//查询条件设置
 	var condition = {
 		refer : {
@@ -36,8 +37,30 @@ function hotMap(){
 	};
 	/*查询及后续promise操作*/
 	getdata('/hotMap',condition).then(function(dbdata){
-		for(var i=0,len=dbdata.length;i<len;i++)
+		$('.loading').hide();
+		for(var i=0,len=dbdata.length;i<len;i++){
 			createHotTangle(minLng,minLat,dbdata[i]);
+		}
+		var allmap = document.getElementById("allmap")
+		var div_svg = allmap.firstChild.children[1].lastChild;
+		console.log(div_svg);
+		//click事件冒泡
+		div_svg.addEventListener("click", function(event){//事件委托
+			var ipath = event.target;//获取click事件目标
+
+			if(oldTangle) {
+				oldTangle.setAttribute("fill",oldColor);
+				oldTangle.setAttribute("fill-opacity",0.5);
+			}
+			oldTangle = ipath;
+			oldColor = ipath.getAttribute("fill");
+			var d = ipath.getAttribute("d");
+			ipath.setAttribute("fill","#00BFFF");
+			ipath.setAttribute("fill-opacity",0.1);
+			setHotMapMessage(getPoint(oldColor,d));
+		});
+/*		var ipath = isvg.getElementsByTagName("path")[0];
+		console.log(ipath.getAttribute("d"));//可取出相应栅格参数*/
 	});//使用闭包
 }
 //闭包函数
@@ -53,7 +76,7 @@ function createHotTangle(minLng,minLat,point){
 	//console.log(rectangle);
 	rectangle.setFillOpacity(0.5);
 	rectangle.setFillColor(color); 
-	rectangle.addEventListener("click", function(){
+/*	rectangle.addEventListener("click", function(){
 		if(oldTangle) {
 			oldTangle.setFillColor(oldColor);
 			oldTangle.setFillOpacity(0.5);
@@ -68,14 +91,40 @@ function createHotTangle(minLng,minLat,point){
 	rectangle.addEventListener("rightclick", function() {  
     	this.setFillColor(oldColor);
 		this.setFillOpacity(0.5);  
-    });
+    });*/
 	map.addOverlay(rectangle);//增加矩形
 	rectangle = null; //减少引用数，减少内存占用
 }
-
+//反向计算value与坐标
+function getPoint(color,d){
+	var re1 = /\d{1,3}/g;
+	var r = parseInt(re1.exec(color));
+	var g = parseInt(re1.exec(color));
+	var b = parseInt(re1.exec(color));
+	var re2 = /\d{1,4}/g;
+	var x = parseInt(re2.exec(d));
+	var y = parseInt(re2.exec(d));
+	var one = (255+255) / 100;
+	var value;
+	var lng;
+	var lat;
+	if(r == 255){
+		value = (255-g)/one+50-120;
+	}
+	else{
+		value = r/one-120;
+	}
+	var bs = map.getBounds();   //获取可视区域
+	var bssw = bs.getSouthWest();   //可视区域左下角
+	var bsne = bs.getNorthEast();   //可视区域右上角
+	lng = (bsne.lng-bssw.lng)/1440*x+bssw.lng;
+	lat = (bsne.lat-bssw.lat)/767*y+bssw.lat;
+	console.log([lng,lat,value]);
+	return [lng,lat,value];
+}
 //由绿到红的渐变色值,百分比 value 取值 1...100  
 function setColor(value){
-	//最大值为100，防止过大出现错误\
+	//最大值为100，防止过大出现错误
 	value = parseInt(value);
 	if(value!=0) value += 120;
 	if(value > 100) value = 100; 

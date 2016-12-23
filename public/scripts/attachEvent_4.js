@@ -25,6 +25,7 @@ addLoadEvent(function(){
 
 /*属性查询触发*/
 $('#resourceRate').click(function(){
+	$('.loading').show();
 	remove_overlay();
 	$('#shut').click();
 	var corporation = $("#corporation").val();//运营商类型
@@ -60,7 +61,7 @@ $('#resourceRate').click(function(){
 					
 	};
 	/*查询及后续promise操作*/
-	getdata('/resourceRate',condition).then(function(dbdata){remove_overlay();drawpoint(dbdata);setAttrQueryMessage(dbdata);});
+	getdata('/resourceRate',condition).then(function(dbdata){$('.loading').hide();remove_overlay();drawpoint(dbdata);setAttrQueryMessage(dbdata);});
 });
 /*$('#clearAllDrawing').click(function(){
 	clearAll();

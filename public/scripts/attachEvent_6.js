@@ -20,12 +20,19 @@ addLoadEvent(function(){
 		Maxtime = dbdata.Maxtime;
 		Mintime = dbdata.Mintime;
 	});
+/*	var bs = map.getBounds();   //获取可视区域
+	var bssw = bs.getSouthWest();   //可视区域左下角
+	var bsne = bs.getNorthEast();   //可视区域右上角
+	var allmap = document.getElementById('allmap');
+	console.log(allmap.clientHeight+","+allmap.clientWidth);
+	console.log('总像素'+(bsne.lat-bssw.lat)/0.0009*14);*/
 });
 /*设置信息弹框*/
 addLoadEvent(setTab);
 
 /*属性查询触发*/
 $('#hotMap').click(function(){
+	$('.loading').show();
 	remove_overlay();
 	$('#shut').click();
 	hotMap();

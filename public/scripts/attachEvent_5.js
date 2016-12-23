@@ -26,6 +26,7 @@ addLoadEvent(setTab);
 
 /*属性查询触发*/
 $('#analyse').click(function(){
+	$('.loading').show();
 	remove_overlay();
 	$('#shut').click();
 	var corporation = $("#corporation").val();//目标运营商类型
@@ -60,7 +61,7 @@ $('#analyse').click(function(){
 					
 	//console.log(condition);
 	/*查询及后续promise操作*/
-	getdata('/interference',condition).then(function(dbdata){remove_overlay();drawpoint(dbdata,addReMarker);setAttrQueryMessage(dbdata);});
+	getdata('/interference',condition).then(function(dbdata){$('.loading').hide();remove_overlay();drawpoint(dbdata,addReMarker);setAttrQueryMessage(dbdata);});
 });
 
 /*信息弹框关闭按钮触发*/
