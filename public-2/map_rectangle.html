@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <link rel="stylesheet" media="screen" href="css/layout.css"/>
+    <link rel="stylesheet" media="screen" href="css/style.css"/>
+
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ePlQjifGzLVBwH9Il3LqAhsHfX14cXOd"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/DistanceTool/1.2/src/DistanceTool_min.js"></script>
+    <script type="text/javascript" src="scripts/jquery.js"></script>
+    <script type="text/javascript" src="scripts/echarts.min.js"></script>
+    <title>栅格业务量展示</title>
+</head>
+<body>
+  <!-- 公共头部 -->
+<div id="header" class='map_rectangle'>
+    <div id="banner">
+            <h1>宽带无线通信业务评估分析与展示系统</h1>
+            <p id="">2016-7-19</p>
+    </div>
+    <ul id="nav">
+        <li class='map_rectangle'>
+            <a  href="#">栅格展示</a>
+        </li>
+        <li class='resource_rate'>
+            <a  href="#">资源利用率</a>
+        </li>
+        <li class='hot_map'>
+            <a  href="#">覆盖分析</a>
+        </li>
+        <li class='network_layout'>
+            <a  href="#">网络布局</a>
+        </li>
+        <li class='interference'>
+            <a  href="#">干扰分析</a>
+        </li>
+    </ul>
+</div>
+<div id="content">
+    <!-- 左侧菜单栏设置 -->
+    <div id="leftMenu">
+        <b style= 'font-size: 30px;'>台站筛选选项</b><br>
+
+        <div style= 'font-size: 20px;'><b>台站类型</b></div>
+        <select id='corporation' style="width:120px;height:35px;vertical-align:middle">
+          <option value="中国移动">中国移动</option>
+          <option value="中国联通">中国联通</option>
+          <option value="中国电信">中国电信</option>
+        </select>
+        <select id='system' style="width:120px;height:35px;vertical-align:middle">
+          <option value="LTE">LTE</option>
+          <option value="CDMA-2000">CDMA-2000</option>
+          <option value="TD-SCDMA">TD-SCDMA</option>
+          <option value="WCDMA">WCDMA</option>
+          <option value="GSM">GSM</option>
+        </select><br>
+        <div style= 'font-size: 20px;'><b>业务类型</b></div>
+        <select id='service' style="width:120px;height:35px;vertical-align:middle">
+          <option value="all">全部</option>
+          <option value="voice">语音</option>
+          <option value="note">短信</option>
+          <option value="dataTraffic">分组域数据</option>
+        </select><br>
+        <div style= 'font-size: 20px;'><b>业务时段</b></div>
+        <input type="date" style="width:80px;height:20px;vertical-align:middle" id="dl" placeholder="2016/07/19"/>
+        <input type="time" style="width:80px;height:20px;vertical-align:middle" id="tl" placeholder="00:00"/>至<br>
+        <input type="date" style="width:80px;height:20px;vertical-align:middle" id="dh" placeholder="2016/07/19"/>
+        <input type="time" style="width:80px;height:20px;vertical-align:middle" id="th" placeholder="05:00"/><br>
+        <div style= 'font-size: 20px;'><b>网格边长</b></div>
+        <input type="number" id="sideLength" min="1" max="10" style="width:80px;height:20px;vertical-align:middle" value="1"/>Km<br>
+        <input type="checkbox" id='average'><span style= 'font-size: 15px;'>方格内各点业务量求平均</span><br>
+        <input id="mapTangle" type="submit"  value="确定" style="width:60px;height:35px;vertical-align:middle" /><br>
+    </div>
+
+    <div id="allmap">
+        <div id="loading" class="loading">Loading pages...</div>
+    </div>
+
+    <!-- 信息弹框设置 -->
+    <div id="tabMessage" >
+      <div id='shut'></div>
+      <b>台站信息展示</b>
+      <div id="tab"> 
+        <!-- 选项卡 -->
+          <h3 class="active">台站信息</h3>
+          <h3>统计信息</h3>
+          <h3>其他</h3>
+
+          <div name="tag" class="content">台站信息</div>
+          <div  name="tag" id='echarts'>
+            <p>统计信息</p>
+            <!-- echarts绘图 -->
+            <!-- <div id='echarts' style='width:500px;height:400px;'></div> -->
+          </div>
+          <div name="tag">其他</div>  
+      </div>
+    </div>
+</div>
+<!-- 公共尾部 -->
+<div id="footer">
+    <p>版权所有 © 2017 北京邮电大学</p>
+</div>
+<script>
+/*地图显示设置*/
+    var map = new BMap.Map("allmap",{enableMapClick:false});
+    var point = new BMap.Point(106.76355,26.634111);
+    map.centerAndZoom(point, 15);
+    map.enableScrollWheelZoom(true);
+    var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); 
+    //右上角，添加默认缩放平移控件     
+    map.addControl(top_right_navigation); 
+    var oldMarker;
+    var oldTangle;
+    var Maxtime;
+    var Mintime;
+
+    //更改标题日期
+    var myDate = new Date();
+    var nowTime = myDate.toLocaleDateString().replace(/\//g,"-");
+    //console.log(nowTime);
+    $('#banner>p').text(nowTime);
+</script>
+
+<script type="text/javascript" src="scripts/time.js"></script>
+<script type="text/javascript" src="scripts/addLoadEvent.js"></script>
+<script type="text/javascript" src="scripts/tabMessage.js"></script>
+<script type="text/javascript" src="scripts/getdata.js"></script>
+<script type="text/javascript" src="scripts/drawPoints.js"></script>
+<script type="text/javascript" src="scripts/mapTangle.js"></script>
+<script type="text/javascript" src="scripts/attachEvent_3.js"></script>
+</body>
+</html>

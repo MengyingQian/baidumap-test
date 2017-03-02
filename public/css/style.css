@@ -1,49 +1,7 @@
-/* GLOBAL STYLES
--------------------------------------------------- */
-body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre,
-form, fieldset, input, textarea, p, blockquote, th, td {
+
+*{
     padding: 0;
     margin: 0;
-}
-
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-
-fieldset, img {
-    border: 0;
-}
-
-address, caption, cite, code, dfn, em, strong, th, var {
-    font-weight: normal;
-    font-style: normal;
-}
-
-ol, ul {
-    list-style: none;
-}
-
-caption, th {
-    text-align: left;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-weight: normal;
-    font-size: 100%;
-}
-
-q:before, q:after {
-    content: '';
-}
-
-abbr, acronym {
-    border: 0;
-    font-variant: normal;
-}
-
-a {
-    text-decoration: none;
 }
 
 .clearfix:after {
@@ -70,12 +28,6 @@ html .clearfix {
 
 /* CUSTOMIZE THE LAYOUT
 -------------------------------------------------- */
-html, body {
-    width: 100%;
-    height: 100%;
-    font-family: "Helvetica", "Arial", "FreeSans", "Verdana", "Tahoma", "Lucida Sans", "Lucida Sans Unicode", "Luxi Sans", sans-serif;
-    overflow: hidden;
-}
 
 #head {
     position: absolute;
@@ -126,6 +78,7 @@ html, body {
     height: 30px;
     text-align: center;
     cursor: pointer;
+    list-style-type: none;
 }
 
 #nav li a {
@@ -138,6 +91,8 @@ html, body {
     font-weight: bold;
     line-height: 30px;
     color: #555353;
+    text-decoration: none;
+    text-align:center;
 }
 
 #nav li ul {
@@ -158,6 +113,7 @@ html, body {
 #nav li ul li a {
     font-size: 13px;
 }
+
 
 #nav li ul li:hover {
     background-color: #8ECDFF;
@@ -239,11 +195,15 @@ div.interference .hover{
     margin-left: 720px;/*默认选择第一个选项卡bug在此*/
 }
 #end {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    z-index: 10000;
-    color: #000;
+    position:fixed;
+    bottom:0;
+    clear:both;
+    background: #0b5ea5 none repeat;
+    color: #FFFFFF;
+    text-align:center;
+    width:100%;
+    padding:5px;
     font-size: 12px;
+    z-index: 9999;
 }
 /*-----------------------------------------*/

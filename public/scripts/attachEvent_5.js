@@ -29,6 +29,16 @@ $('#analyse').click(function(){
 	$('.loading').show();
 	remove_overlay();
 	$('#shut').click();
+	influence();
+});
+
+/*信息弹框关闭按钮触发*/
+$('#shut').click(function(){
+	$('#tabMessage').hide();
+	if(oldMarker) oldMarker.setAnimation();
+});
+
+function influence(){
 	var corporation = $("#corporation").val();//目标运营商类型
 	var system = $("#system").val();//目标制式类型
 	//中心频率获取
@@ -62,11 +72,4 @@ $('#analyse').click(function(){
 	//console.log(condition);
 	/*查询及后续promise操作*/
 	getdata('/interference',condition).then(function(dbdata){$('.loading').hide();remove_overlay();drawpoint(dbdata,addReMarker);setAttrQueryMessage(dbdata);});
-});
-
-/*信息弹框关闭按钮触发*/
-$('#shut').click(function(){
-	$('#tabMessage').hide();
-	if(oldMarker) oldMarker.setAnimation();
-});
-
+}

@@ -16,6 +16,8 @@ app.use(express.static('public'));
 
 //初始页面
 app.get('/',function(req,res){
+	res.setHeader('Cache-Control','max-age=5');
+//	res.setHeader('Last-Modified','Thu, 12 Jan 2017 08:32:32 GMT');
 	res.sendFile(__dirname+"/views/map_rectangle.html");
 });
 //屏蔽错误请求
