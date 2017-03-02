@@ -1,5 +1,3 @@
-document.write('<script src="scripts/time.js"></script>');
-document.write('<script src="scripts/echarts.min.js"></script>');
 
 //右侧台站信息框触发设置
 function setTab(){

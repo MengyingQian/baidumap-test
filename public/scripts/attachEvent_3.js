@@ -1,13 +1,3 @@
-document.write('<script src="scripts/mapTangle.js"></script>');
-/*获取公共头部*/
-$.get("html/head.html ",function(data){
-	$("#head").html(data);
-});
-/*获取公共尾部*/
-$.get("html/end.html ",function(data){
-	$("#end").html(data);
-});
-
 
 /*设置信息弹框*/
 addLoadEvent(setTab);
@@ -33,7 +23,7 @@ $('#shut').click(function(){
 	if(oldMarker) oldMarker.setAnimation();
 });
 $("#mapTangle").click(function(){
-	$('.loading').show();
+	$('.loading').show();//show函数改变display特性
 	remove_overlay();
 	$('#shut').click();
 	mapTangle();

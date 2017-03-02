@@ -19,57 +19,62 @@
             <p id="">2016-7-19</p>
     </div>
     <ul id="nav">
-        <li class='map_rectangle'>
-            <a  href="#">栅格展示</a>
-        </li>
-        <li class='resource_rate'>
-            <a  href="#">资源利用率</a>
-        </li>
-        <li class='hot_map'>
-            <a  href="#">覆盖分析</a>
-        </li>
-        <li class='network_layout'>
-            <a  href="#">网络布局</a>
-        </li>
-        <li class='interference'>
-            <a  href="#">干扰分析</a>
-        </li>
+        <li class='map_rectangle'><a href="#">栅格展示</a> </li>
+        <li class='resource_rate'><a href="#">资源利用率</a></li>
+        <li class='hot_map'><a href="#">覆盖分析</a></li>
+        <li class='network_layout'><a href="#">网络布局</a></li>
+        <li class='interference'><a href="#">干扰分析</a></li>
     </ul>
 </div>
-<div id="content">
+<div id="pageBody">
     <!-- 左侧菜单栏设置 -->
     <div id="leftMenu">
-        <b style= 'font-size: 30px;'>台站筛选选项</b><br>
-
-        <div style= 'font-size: 20px;'><b>台站类型</b></div>
-        <select id='corporation' style="width:120px;height:35px;vertical-align:middle">
-          <option value="中国移动">中国移动</option>
-          <option value="中国联通">中国联通</option>
-          <option value="中国电信">中国电信</option>
-        </select>
-        <select id='system' style="width:120px;height:35px;vertical-align:middle">
-          <option value="LTE">LTE</option>
-          <option value="CDMA-2000">CDMA-2000</option>
-          <option value="TD-SCDMA">TD-SCDMA</option>
-          <option value="WCDMA">WCDMA</option>
-          <option value="GSM">GSM</option>
-        </select><br>
-        <div style= 'font-size: 20px;'><b>业务类型</b></div>
-        <select id='service' style="width:120px;height:35px;vertical-align:middle">
-          <option value="all">全部</option>
-          <option value="voice">语音</option>
-          <option value="note">短信</option>
-          <option value="dataTraffic">分组域数据</option>
-        </select><br>
-        <div style= 'font-size: 20px;'><b>业务时段</b></div>
-        <input type="date" style="width:80px;height:20px;vertical-align:middle" id="dl" placeholder="2016/07/19"/>
-        <input type="time" style="width:80px;height:20px;vertical-align:middle" id="tl" placeholder="00:00"/>至<br>
-        <input type="date" style="width:80px;height:20px;vertical-align:middle" id="dh" placeholder="2016/07/19"/>
-        <input type="time" style="width:80px;height:20px;vertical-align:middle" id="th" placeholder="05:00"/><br>
-        <div style= 'font-size: 20px;'><b>网格边长</b></div>
-        <input type="number" id="sideLength" min="1" max="10" style="width:80px;height:20px;vertical-align:middle" value="1"/>Km<br>
-        <input type="checkbox" id='average'><span style= 'font-size: 15px;'>方格内各点业务量求平均</span><br>
-        <input id="mapTangle" type="submit"  value="确定" style="width:60px;height:35px;vertical-align:middle" /><br>
+        <h2>台站筛选选项</h2>
+        <form>
+          <p>
+            <label>台站类型</label>
+            <select id='corporation' >
+              <option value="中国移动">中国移动</option>
+              <option value="中国联通">中国联通</option>
+              <option value="中国电信">中国电信</option>
+            </select>
+            <select id='system' >
+              <option value="LTE">LTE</option>
+              <option value="CDMA-2000">CDMA-2000</option>
+              <option value="TD-SCDMA">TD-SCDMA</option>
+              <option value="WCDMA">WCDMA</option>
+              <option value="GSM">GSM</option>
+            </select>
+          </p>
+          <p>
+          <label>业务类型</label>
+          <select id='service' >
+            <option value="all">全部</option>
+            <option value="voice">语音</option>
+            <option value="note">短信</option>
+            <option value="dataTraffic">分组域数据</option>
+          </select>
+          </p>
+          <p>
+          <label>开始时间</label>
+          <input type="date"  id="dl" placeholder="2016/07/19"/>
+          <input type="time"  id="tl" placeholder="00:00"/>
+          </p>
+          <p>
+          <label>结束时间</label>
+          <input type="date"  id="dh" placeholder="2016/07/19"/>
+          <input type="time"  id="th" placeholder="05:00"/><br>
+          </p>
+          <p>
+          <label>网格边长</label>
+          <input type="number" id="sideLength" min="1" max="10"  value="1"/>Km
+          </p>
+          <p>
+          <label>各方格求平均</label>
+          <input type="checkbox" id='average'/>
+          </p>
+          <input id="mapTangle" type="submit"  value="确定"  />
+        <form>
     </div>
 
     <div id="allmap">

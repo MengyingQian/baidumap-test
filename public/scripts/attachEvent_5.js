@@ -1,11 +1,11 @@
-document.write('<script src="scripts/time.js"></script>');
+
 /*获取公共头部*/
 $.get("html/head.html ",function(data){
-	$("#head").html(data);
+	$("#header").html(data);
 });
 /*获取公共尾部*/
 $.get("html/end.html ",function(data){
-	$("#end").html(data);
+	$("#footer").html(data);
 });
 
 /*加载全部台站点*/

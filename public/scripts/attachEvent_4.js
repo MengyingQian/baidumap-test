@@ -1,4 +1,4 @@
-document.write('<script src="scripts/time.js"></script>');
+
 /*获取公共头部*/
 $.get("html/head.html ",function(data){
     $("#head").html(data);

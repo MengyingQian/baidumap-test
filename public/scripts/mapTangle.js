@@ -1,4 +1,4 @@
-document.write('<script src="scripts/time.js"></script>');
+
 function mapTangle(){
 	var bs = map.getBounds();   //获取可视区域
 	var bssw = bs.getSouthWest();   //可视区域左下角
