@@ -26,7 +26,7 @@ addLoadEvent(function(){
 addLoadEvent(setTab);
 
 /*属性查询触发*/
-$('#layout').click(function(){
+$('#submit').click(function(){
 	$('.loading').show();
 	remove_overlay();
 	$('#shut').click();

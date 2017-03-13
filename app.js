@@ -111,6 +111,6 @@ app.use(function(err, req, res, next) {
     next();  
 });
 //监听8080端口
-app.listen(8080, function(){
-    console.log("Express server listening 8080");
+app.listen(8081, function(){
+    console.log("Express server listening 8081");
 });

@@ -1,12 +1,4 @@
 
-/*获取公共头部*/
-$.get("html/head.html ",function(data){
-	$("#head").html(data);
-});
-/*获取公共尾部*/
-$.get("html/end.html ",function(data){
-	$("#end").html(data);
-});
 
 /*加载全部台站点*/
 /*addLoadEvent(function(){
@@ -31,7 +23,7 @@ addLoadEvent(function(){
 addLoadEvent(setTab);
 
 /*属性查询触发*/
-$('#hotMap').click(function(){
+$('#submit').click(function(){
 	$('.loading').show();
 	remove_overlay();
 	$('#shut').click();

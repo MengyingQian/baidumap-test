@@ -32,7 +32,7 @@ function setPointMessage(point){
     var aDiv = document.getElementsByName("tag");
     //各选项卡内容设置
     aDiv[0].innerHTML = contentMake(point);
-    aDiv[1].getElementsByTagName("p")[0].innerHTML = resultMake(point);
+    aDiv[1].firstChild.nodeValue = resultMake(point);
     aDiv[2].innerHTML = "其他";
     $("div").remove('.echarts');
     //aDiv[1].getElementsByTagName("p")[0].innerHTML = "频率信息";
@@ -76,7 +76,7 @@ function setAttrQueryMessage(data){
     var content = "依据属性共查询到"+data.length+"个台站";
         //各选项卡内容设置
         aDiv[0].innerHTML = content;
-        aDiv[1].getElementsByTagName("p")[0].innerHTML = oTab.getElementsByTagName("h3")[1].innerHTML;
+        aDiv[1].firstChild.nodeValue = oTab.getElementsByTagName("h3")[1].innerHTML;
         $("div").remove('.echarts');
         //document.getElementById('echarts').innerHTML = "";
         aDiv[2].innerHTML = "其他";
@@ -90,7 +90,7 @@ function setMapTangleMessage(data){
         var content = "此栅格内共"+data.length+"个台站"+"<br />";
         //各选项卡内容设置
         aDiv[0].innerHTML = content;
-        aDiv[1].getElementsByTagName("p")[0].innerHTML = "";
+        aDiv[1].firstChild.nodeValue = "";
         aDiv[2].innerHTML = "其他";
         var abbrs = [];
         var number = {};
@@ -145,7 +145,7 @@ function setHotMapMessage(data){
                     "接收功率："+data[2]+"dbm"+"<br />";
         //各选项卡内容设置
         aDiv[0].innerHTML = content;
-        aDiv[1].getElementsByTagName("p")[0].innerHTML = "热力图";
+        aDiv[1].firstChild.nodeValue = "热力图";
         aDiv[2].innerHTML = "其他";
         $('#tabMessage').show();
 }
@@ -200,7 +200,6 @@ function resultMake(point){
         content += key.split('(')[0]+' : '+point[key];
         var re = /.*\((.*)\)/;
         if(re.exec(key)) content += re.exec(key).pop();
-        content += "<br />";
     }
     return content;
 }

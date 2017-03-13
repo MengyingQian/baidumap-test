@@ -1,4 +1,3 @@
-
 /*设置信息弹框*/
 addLoadEvent(setTab);
 //获取时间跨度，设置默认时间
@@ -22,20 +21,12 @@ $('#shut').click(function(){
 	$('#tabMessage').hide();
 	if(oldMarker) oldMarker.setAnimation();
 });
-$("#mapTangle").click(function(){
+$("#submit").click(function(){
 	$('.loading').show();//show函数改变display特性
 	remove_overlay();
 	$('#shut').click();
 	mapTangle();
 })
-
-$(".nav-roundslide a.show").click(function(){
-    $(".nav-roundslide a.show").css('display','none');
-    $(".nav-roundslide a.hide").css('display','block');
-    $("#leftMenu").animate({left:'0px'});
-})
-$(".nav-roundslide a.hide").click(function(){
-    $(".nav-roundslide a.hide").css('display','none');
-    $(".nav-roundslide a.show").css('display','block');
-    $("#leftMenu").animate({left:'-275px'});
-})
+/*$("#submit").submit(function(event){
+	event.preventDefault();
+})*/

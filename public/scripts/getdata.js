@@ -17,7 +17,8 @@ function getdata(url,condition){
 			resolve(data);
 		},
 		error:function(err){
-			alert('fail');
+			console.log(err);
+			alert("fail");
 		}
 	});
 	});

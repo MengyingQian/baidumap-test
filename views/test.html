@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  #body{
+    display: flex;
+    height:500px;
+    width:400px;
+  }
+  #content1{
+    flex:auto;
+    background-color: #00ff00;
+    min-width:100px;
+  }
+  #content2{
+    flex:auto;
+    display: flex;
+    background-color: #0000FF;
+    min-width:100px;
+  }
+  #content3{
+    width:50%;
+    height:50%;
+    background-color: #ff0000;
+  }
+  #content4{
+    
+    left:10%;
+    width:50%;
+    height:100%;
+    background-color: #000000;
+  }
+</style>
+</head>
+<body>
+<div id="body">
+  <div id="content1"></div>
+  <div id="content2">
+    <div id="content3"></div>
+    <div id="content4"></div>
+  </div>
+</div>
+</body>
+</html>
