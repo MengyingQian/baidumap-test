@@ -4,6 +4,7 @@
 	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ePlQjifGzLVBwH9Il3LqAhsHfX14cXOd"></script>
   <script type="text/javascript" src="scripts/jquery.js"></script>
   <script type="text/javascript" src="scripts/echarts.min.js"></script>
+  <script type="text/javascript" src="scripts/vue.js"></script>
 	<link rel="stylesheet" media="screen" href="css/style.css"/>
  
   <title>覆盖分析</title>
@@ -11,18 +12,7 @@
 <body>
   <!-- 公共头部 -->
 <div id="header" class='hot_map'>
-    <div id="banner">
-            <h1>宽带无线通信业务评估分析与展示系统</h1>
-            <p id="">2016-7-19</p>
-    </div>
-    <ul id="nav">
-        <li class='map_rectangle'><a href="map_rectangle">栅格展示</a> </li>
-        <li class='resource_rate'><a href="resource_rate">资源利用率</a></li>
-        <li class='hot_map'><a href="hot_map">覆盖分析</a></li>
-        <li class='network_layout'><a href="network_layout">网络布局</a></li>
-        <li class='interference'><a href="interference">干扰分析</a></li>
-        <div id="clear"></div>
-    </ul>
+    <pagehead></pagehead>
 </div>
 
 <div id="pageBody">
@@ -76,25 +66,9 @@
 <div id="footer">
     <p>版权所有 © 2017 北京邮电大学</p>
 </div>
-<script>
-/*地图显示设置*/
-  var map = new BMap.Map("allmap",{enableMapClick:false});
-  var point = new BMap.Point(106.76355,26.634111);
-  map.centerAndZoom(point, 15);
-  map.enableScrollWheelZoom(true);
-  var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); //右上角，添加默认缩放平移控件     
-  map.addControl(top_right_navigation); 
-  var top_right_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_RIGHT });// 左下角，添加比例尺
-  map.addControl(top_right_control); 
-  var oldTangle;
-  var oldColor;
-	//更改标题日期
-  var myDate = new Date();
-  var nowTime = myDate.toLocaleDateString().replace(/\//g,"-");
-  //console.log(nowTime);
-  $('#banner>p').text(nowTime);
-</script>
 
+
+<script type="text/javascript" src="scripts/vuehead.js"></script>
 <script type="text/javascript" src="scripts/time.js"></script>
 <script type="text/javascript" src="scripts/addLoadEvent.js"></script>
 <script type="text/javascript" src="scripts/tabMessage.js"></script>

@@ -41,7 +41,8 @@ body{
 #nav{
     margin:0;
     padding: 0;
-    height:45px;
+    height:45px;/*有高度不用另外设置BFC*/
+    width: 100%;
     list-style-type: none;
     text-align:center;
     background-color:#D0E9FF;
