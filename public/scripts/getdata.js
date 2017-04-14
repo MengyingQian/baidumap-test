@@ -18,7 +18,6 @@ function getdata(url,condition){
 		},
 		error:function(err){
 			console.log(err);
-			alert("fail");
 		}
 	});
 	});

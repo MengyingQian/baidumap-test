@@ -10,13 +10,32 @@ body{
 }
 /*页首样式*/
 #header{
+    display: flex;
     flex-direction: column;
     flex:0 0 auto;
     color:#FFFFFF;
     padding:0;
-    height:20%;
+/*    height:20%;*/
+}
+/*页脚样式*/
+#footer{
+    flex:0 0 auto;
+    background: #0b5ea5 none repeat;
+    color: #FFFFFF;
+    text-align:center;
+    width:100%;
+    font-size: 12px;
+    min-height: 10px;
+}
+/*整个页面内容*/
+#pageBody{
+    display:flex;
+    flex:1 0 auto;
+    position: relative;
+    /*height:80%;*/
 }
 #banner{
+    flex:1 0 auto;
     background: #293C55 none repeat;
     margin:0;
     padding:10px;
@@ -39,6 +58,7 @@ body{
 }
 /*导航栏*/
 #nav{
+    flex:0;
     margin:0;
     padding: 0;
     height:45px;/*有高度不用另外设置BFC*/
@@ -80,22 +100,7 @@ div.interference li.interference
     background-color: #8ECDFF;
 }
 
-/*页脚样式*/
-#footer{
-    flex:0 0 auto;
-    background: #0b5ea5 none repeat;
-    color: #FFFFFF;
-    text-align:center;
-    width:100%;
-    font-size: 12px;
-    min-height: 10px;
-}
-/*整个页面内容*/
-#pageBody{
-    display:flex;
-    flex:1 0 auto;
-    height:80%;
-}
+
 /*左侧菜单*/
 #leftMenu{
     border-right: 1px solid black;
@@ -144,26 +149,24 @@ div.interference li.interference
 /*右侧地图+弹出框*/
 #rightContent{
     flex:1;
+    overflow: hidden;
+    position: relative;
 }
 
-#rightContent #allmap{
+#allmap{
     width:100%;
     height:100%;
 }
 
-#rightContent{
-    display:block;
-}
-
-#rightContent #loading {  
+#loading {  
     text-align:center;
     display: none;
     width:100%;
-    height:80%;  
-    position: absolute;  
-    top:20%;
+    height:100%;  
+    line-height:56px; 
+    position: absolute; 
     left:0;
-    line-height:56px;  
+    right:0;
     color:#fff;   
     font-size:15px;  
     background: #000 url(../img/loader.gif) no-repeat 50% 50%;  
@@ -173,14 +176,14 @@ div.interference li.interference
 /*右侧弹出框*/
 #tabMessage {  
     width: 300px;
-    max-height: 80%;
     border-left: 1px solid #000000;
     border-bottom: 1px solid #000000;
+    border-top: 1px solid #000000;
     padding-left:20px; 
     background-color:#F7F7F9; 
     position:absolute;
     right:0;
-    top:20%;
+    top:0;
     border-top-left-radius: 5px;/*边角样式*/
     border-bottom-left-radius: 5px;
     display: none;
@@ -201,7 +204,7 @@ div.interference li.interference
     /*width: 300px;*/
     margin: 0 auto;
     box-shadow: 5px 5px 5px #888888;
-    }
+}
 #tab h3 {
     margin: 0px;
     padding: 0px;
@@ -216,10 +219,10 @@ div.interference li.interference
 }
 #tab>div {
     clear: both;
-    height: 400px;
+    height: 350px;
     font-size: 14px;
     line-height:40px;
-    padding: 20px 0px 0px 20px;    
+    padding: 20px 0px 0px 20px;  
 }
 #tab h3.active {
     background: #ECF0F1;
@@ -229,7 +232,7 @@ div.interference li.interference
     overflow-y: auto;/*纵向拉条*/
     word-break:keep-all;/*不换行*/
     white-space:nowrap;/*不换行*/
-    display: block;
+    display: none;
     background: #ECF0F1;
 }
 .echarts {

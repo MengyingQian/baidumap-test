@@ -6,6 +6,7 @@ var tt = require('./lib/DBOperation');
 //var cmd = require('./lib/cmdOperation');
 var matlab = require('./lib/MATLAB');
 var query = require('./lib/querySet');
+var calculate = require('./lib/calculate')
 var app = express();
 
 app.use(bodyParser.json()); // for parsing application/json
@@ -35,7 +36,8 @@ app.post('/attrQuery',function(req,res){
 //资源利用率处理
 app.post('/resourceRate',function(req,res){
 	tt.attrQuery(req.body.refer,req.body.props||[])
-	.then(matlab.MATLAB_rate)
+	.then(calculate.rate)
+//	.then(matlab.MATLAB_rate)
 	.then(function(data){res.send(data);console.log('send');})
 	.catch(function (reason) {res.end();console.log('失败：' + reason);})
 	.finally(function(){res.end();console.log('finally');});
@@ -44,7 +46,6 @@ app.post('/resourceRate',function(req,res){
 app.post('/interference',function(req,res){
 	tt.attrQuery(req.body.refer,req.body.props||[])
 	.then(function(data){
-		//console.log(data[0]["业务时间"]);
 		return query.NIBS(data,req.body.refer_2,data.length-1)
 		.then(function(data1){
 			return  {
@@ -53,7 +54,8 @@ app.post('/interference',function(req,res){
 					};
 		})
 	})
-	.then(matlab.MATLAB_interference)
+	.then(calculate.interference)
+	//.then(matlab.MATLAB_interference)
 	.then(function(data){res.send(data);console.log('send');})
 	.catch(function (reason) {res.end();console.log('失败：' + reason);})
 	.finally(function(){res.end();console.log('finally');});
@@ -64,7 +66,8 @@ app.post('/hotMap',function(req,res){
 	.then(function(data){
 		return query.NBS(data,req.body.searchBox);
 	})
-	.then(matlab.MATLAB_hotMap)
+	.then(calculate.hotMap)
+	//.then(matlab.MATLAB_hotMap)
 	.then(function(data){res.send(data);console.log('send');})
 	.catch(function (reason) {res.end();console.log('失败：' + reason);})
 	.finally(function(){res.end();console.log('finally');});
@@ -73,7 +76,6 @@ app.post('/hotMap',function(req,res){
 app.post('/layout',function(req,res){
 	tt.attrQuery(req.body.refer,req.body.props||[])
 	.then(function(data){
-		//console.log(data[0]);
 		return query.NIBS(data,req.body.refer_2,data.length-1)
 		.then(function(data1){
 			return  {
@@ -82,7 +84,8 @@ app.post('/layout',function(req,res){
 					};
 		})
 	})
-	.then(matlab.MATLAB_layout)
+	.then(calculate.layout)
+	//.then(matlab.MATLAB_layout)
 	.then(function(data){res.send(data);console.log('send');})
 	.catch(function (reason) {res.end();console.log('失败：' + reason);})
 	.finally(function(){res.end();console.log('finally');});

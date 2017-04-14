@@ -13,9 +13,11 @@
 <body>
   <!-- 公共头部 -->
 <div id="header" class='interference'>
-    <pagehead></pagehead>
+  <page-head></page-head>
 </div>
 <div id="pageBody">
+    <!-- 加载时覆盖 -->
+    <div id="loading" class="loading">Loading pages...</div>
     <!-- 左侧菜单栏设置 -->
     <div id="leftMenu">
         <h2>台站筛选选项</h2>
@@ -37,8 +39,8 @@
           </p>
           <p>
             <label>中心频率范围</label>
-            <input type="text" id="fl" class="shortInput" placeholder="1894"/> 至 
-            <input type="text" id="fh" class="shortInput" placeholder="1896"/>MHz
+            <input type="text" id="fl" class="shortInput" placeholder="38399"/> 至 
+            <input type="text" id="fh" class="shortInput" placeholder="38401"/>MHz
           </p>
           <p>
             <label>干扰源台站类型</label>
@@ -60,7 +62,6 @@
     </div>
     <div id="rightContent">
         <div id="allmap"></div>
-        <div id="loading" class="loading">Loading pages...</div>
         <!-- 信息弹框设置 -->
         <div id="tabMessage" >
         	<div id='shut'></div>
@@ -130,10 +131,10 @@
 </div>
 <!-- 公共尾部 -->
 <div id="footer">
-    <p>版权所有 © 2017 北京邮电大学</p>
+    <page-foot></page-foot>
 </div>
 
-<script type="text/javascript" src="scripts/vuehead.js"></script>
+<script type="text/javascript" src="scripts/vuePages.js"></script>
 <script type="text/javascript" src="scripts/time.js"></script>
 <script type="text/javascript" src="scripts/addLoadEvent.js"></script>
 <script type="text/javascript" src="scripts/tabMessage.js"></script>

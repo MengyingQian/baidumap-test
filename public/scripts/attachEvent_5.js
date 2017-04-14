@@ -1,13 +1,5 @@
 
-
-/*加载全部台站点*/
-/*addLoadEvent(function(){
-	getdata('/attrQuery',{search:"{}"})
-	.then(function(dbdata){remove_overlay();drawpoint(dbdata);});
-});*/
-//获取时间跨度
-addLoadEvent(function(){
-	/*地图显示设置*/
+/*地图显示设置*/
 	var map = new BMap.Map("allmap",{enableMapClick:false});
 	var point = new BMap.Point(106.76355,26.634111);
 	map.centerAndZoom(point, 15);
@@ -18,11 +10,19 @@ addLoadEvent(function(){
 	var oldReMarker = [];
 	var Maxtime;
 	var Mintime;
-	/*getdata('/aggregate',{system:'LTE',attr:'业务时间'})
+/*加载全部台站点*/
+/*addLoadEvent(function(){
+	getdata('/attrQuery',{search:"{}"})
+	.then(function(dbdata){remove_overlay();drawpoint(dbdata);});
+});*/
+//获取时间跨度
+addLoadEvent(function(){
+	
+	getdata('/aggregate',{system:'LTE',attr:'业务时间'})
 	.then(function(dbdata){
 		Maxtime = dbdata.Maxtime;
 		Mintime = dbdata.Mintime;
-	});*/
+	});
 });
 /*设置信息弹框*/
 addLoadEvent(setTab);

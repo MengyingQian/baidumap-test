@@ -22,6 +22,7 @@ function setTab(){
             aDiv[this.index].style.display = "block";
         };
     }
+    aH3[0].click();
 };
 
 
@@ -192,7 +193,7 @@ function contentMake(point){
 function resultMake(point){
     var content = '';
     //定义属性数组
-    var props = ['对象标识','运营商类型',"制式类型","Azimuth(度)","站高(m)","DownTilt(度)","载波频点(MHz)","基站发射功率(dBm)",'geom',"基站发射功率(dBm)","共站情况","业务时间"];
+    var props = ['对象标识','运营商类型',"制式类型","Azimuth(度)","站高(m)","DownTilt(度)","载波频点(MHz)","基站发射功率(dBm)",'geom',"共站情况","业务时间"];
     for(var key in point){
         if(props.indexOf(key)>=0) continue;
         if(typeof point[key]=='object'||Array.isArray(point[key])) continue;
@@ -250,7 +251,6 @@ function echartsMake(xData,yData,abbr){
 }
 
 function echartsAbbr(name){
-    var abbr = new Object();
     switch(name){
         case 'LTE下行总流量(MByte)':
             var abbr = {

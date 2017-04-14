@@ -13,9 +13,11 @@
 <body>
   <!-- 公共头部 -->
 <div id="header" class='resource_rate'>
-    <pagehead></pagehead>
+  <page-head></page-head>
 </div>
 <div id="pageBody">
+    <!-- 加载时覆盖 -->
+    <div id="loading" class="loading">Loading pages...</div>
   <!-- 左侧菜单栏设置 -->
   <div id="leftMenu">
       <h2>台站筛选选项</h2>
@@ -50,7 +52,6 @@
   </div>
   <div id="rightContent">
     <div id="allmap"></div>
-    <div id="loading" class="loading">Loading pages...</div>
     <!-- 信息弹框设置 -->
     <div id="tabMessage" >
     	<div id='shut'></div>
@@ -71,10 +72,10 @@
 </div>
 <!-- 公共尾部 -->
 <div id="footer">
-    <p>版权所有 © 2017 北京邮电大学</p>
+    <page-foot></page-foot>
 </div>
 
-<script type="text/javascript" src="scripts/vuehead.js"></script>
+<script type="text/javascript" src="scripts/vuePages.js"></script>
 <script type="text/javascript" src="scripts/time.js"></script>
 <script type="text/javascript" src="scripts/addLoadEvent.js"></script>
 <script type="text/javascript" src="scripts/tabMessage.js"></script>
