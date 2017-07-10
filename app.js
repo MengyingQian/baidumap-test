@@ -4,7 +4,6 @@ var express = require("express");
 var bodyParser = require('body-parser');
 var tt = require('./lib/DBOperation');
 //var cmd = require('./lib/cmdOperation');
-var matlab = require('./lib/MATLAB');
 var query = require('./lib/querySet');
 var calculate = require('./lib/calculate')
 var app = express();
@@ -16,6 +15,10 @@ app.use(express.static('public'));
 //cmd.startDB();
 
 //初始页面
+app.get('/ajax',function(req,res){
+	res.sendFile(__dirname+"/views/ajax.html");
+})
+
 app.get('/',function(req,res){
 	res.setHeader('Cache-Control','max-age=5');
 //	res.setHeader('Last-Modified','Thu, 12 Jan 2017 08:32:32 GMT');
@@ -37,7 +40,6 @@ app.post('/attrQuery',function(req,res){
 app.post('/resourceRate',function(req,res){
 	tt.attrQuery(req.body.refer,req.body.props||[])
 	.then(calculate.rate)
-//	.then(matlab.MATLAB_rate)
 	.then(function(data){res.send(data);console.log('send');})
 	.catch(function (reason) {res.end();console.log('失败：' + reason);})
 	.finally(function(){res.end();console.log('finally');});
@@ -55,7 +57,6 @@ app.post('/interference',function(req,res){
 		})
 	})
 	.then(calculate.interference)
-	//.then(matlab.MATLAB_interference)
 	.then(function(data){res.send(data);console.log('send');})
 	.catch(function (reason) {res.end();console.log('失败：' + reason);})
 	.finally(function(){res.end();console.log('finally');});
@@ -67,7 +68,6 @@ app.post('/hotMap',function(req,res){
 		return query.NBS(data,req.body.searchBox);
 	})
 	.then(calculate.hotMap)
-	//.then(matlab.MATLAB_hotMap)
 	.then(function(data){res.send(data);console.log('send');})
 	.catch(function (reason) {res.end();console.log('失败：' + reason);})
 	.finally(function(){res.end();console.log('finally');});
@@ -85,7 +85,6 @@ app.post('/layout',function(req,res){
 		})
 	})
 	.then(calculate.layout)
-	//.then(matlab.MATLAB_layout)
 	.then(function(data){res.send(data);console.log('send');})
 	.catch(function (reason) {res.end();console.log('失败：' + reason);})
 	.finally(function(){res.end();console.log('finally');});

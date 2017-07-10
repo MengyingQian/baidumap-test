@@ -176,6 +176,7 @@ div.interference li.interference
 /*右侧弹出框*/
 #tabMessage {  
     width: 300px;
+    max-height:100%;
     border-left: 1px solid #000000;
     border-bottom: 1px solid #000000;
     border-top: 1px solid #000000;
@@ -188,7 +189,7 @@ div.interference li.interference
     border-bottom-left-radius: 5px;
     display: none;
     z-index:9999;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 #shut{
     width:45px;
@@ -202,8 +203,9 @@ div.interference li.interference
 }
 #tab{
     /*width: 300px;*/
+    max-height:100%;
     margin: 0 auto;
-    box-shadow: 5px 5px 5px #888888;
+    /*box-shadow: 5px 5px 5px #888888;*/
 }
 #tab h3 {
     margin: 0px;
@@ -219,7 +221,8 @@ div.interference li.interference
 }
 #tab>div {
     clear: both;
-    height: 350px;
+    min-height: 200px;
+    max-height:350px;
     font-size: 14px;
     line-height:40px;
     padding: 20px 0px 0px 20px;  
@@ -228,8 +231,7 @@ div.interference li.interference
     background: #ECF0F1;
 }
 #tab .content {
-    overflow-x:auto;/*横向拉条*/
-    overflow-y: auto;/*纵向拉条*/
+    overflow:auto;
     word-break:keep-all;/*不换行*/
     white-space:nowrap;/*不换行*/
     display: none;
