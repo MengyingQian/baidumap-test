@@ -1,46 +1,53 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Hello from '../components/Hello.vue'
-import showId from '../components/showId.vue'
-import bar from '../components/bar.vue'
-import calendar from '../components/price-calendar/calendar.vue'
-import priceCalendar from '../components/price-calendar/price-calendar.vue'
+import hotMap from '../components/hot-map/hot-map.vue'
+import interference from '../components/interference/interference.vue'
+import mapRectangle from '../components/map-rectangle/map-rectangle.vue'
+import networkLayout from '../components/network-layout/network-layout.vue'
+import resourceRate from '../components/resource-rate/resource-rate.vue'
 
 Vue.use(VueRouter)
 
-const routes =  [
+let routes = [
     {
         path: '/',
-        name: 'Hello',
-        component: Hello,
-        meta:{title:'hello'},
-        children:[
-        {
-            path:'bar',
-            name:bar,
-            component:bar,
-            meta: { title:'bar' }
+        redirect: '/map-rectangle'
+    },
+    {
+        path: '/hot-map',
+        component: hotMap,
+        meta: {
+            title: '覆盖分析'
         }
-        ]
     },
     {
-        path: '/calendar',
-        name: 'calendar',
-        meta:{title:'calendar'},
-        component: calendar,
+        path: '/interference',
+        component: interference,
+        meta: {
+            title: '干扰分析'
+        }
     },
     {
-        path: '/priceCalendar',
-        name: 'priceCalendar',
-        meta:{title:'priceCalendar'},
-        component: priceCalendar,
+        path: '/map-rectangle',
+        component: mapRectangle,
+        meta: {
+            title: '业务量分析'
+        }
     },
     {
-        path: '/:id',
-        name: 'id',
-        meta:{title:'bar'},
-        component: showId,
-    }
+        path: '/network-layout',
+        component: networkLayout,
+        meta: {
+            title: '网络布局'
+        }
+    },
+    {
+        path: '/resource-rate',
+        component: resourceRate,
+        meta: {
+            title: '资源利用率'
+        }
+    },
 ]
 
 const router = new VueRouter({
@@ -49,7 +56,6 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to,from,next)=>{
-    console.log(to);
     document.title = to.meta.title;
     next();
 })

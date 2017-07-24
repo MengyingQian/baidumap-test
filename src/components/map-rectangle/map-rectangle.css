@@ -1,0 +1,45 @@
+/*左侧菜单*/
+.leftMenu{
+    border-right: 1px solid black;
+    background-color: #F7F7F9;
+    flex:0 0 340px;
+    text-align: center;
+    overflow-x:auto;/*横向拉条*/
+    overflow-y: auto;/*纵向拉条*/
+    white-space:nowrap;/*不换行*/
+}
+
+.leftMenu .form{
+    margin:20px 0 0 5px;
+    text-align:left;
+}
+
+.leftMenu .form label{
+    display:inline-block;
+    width:100px;
+    text-align:right;
+    margin-right:5px;
+    font-family: Microsoft YaHei,Tahoma,Verdana,Arial,Helvetica,sans-serif;
+    font-size:14px;
+}
+
+.leftMenu .form input:not(.average):not(.shortInput){
+    display:inline-block;
+    text-align: center;
+    width: 100px;
+}
+
+.leftMenu .form .shortInput{
+    display:inline-block;
+    text-align: center;
+    width:70px;
+}
+.leftMenu .form .submit{
+    display:block;
+    margin-left: 200px;
+    width: 60px;
+    height:30px;
+    border-radius: 5px;
+    color:#FFFFFF;
+    background-color: #0b5ea5;
+}
