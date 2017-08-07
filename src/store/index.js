@@ -7,7 +7,11 @@ import mutations from './mutations.js'
 Vue.use(Vuex)
 
 const vuexStore = {
-	state: {},
+	state: {
+		map: {},
+		count: 1
+	},
+	mutations,
 	getters,
 	actions,
 	strict: true
