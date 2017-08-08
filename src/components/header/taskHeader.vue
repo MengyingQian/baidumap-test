@@ -1,23 +1,21 @@
 <template>
-    <div v-once>
+    <div>
         <div class="banner">
-            <h1 v-text="banner.name"></h1>
+            <h1 v-text="name"></h1>
             <p v-text="setData"></p>
         </div>
-        <ul class="nav">
-            <li v-for="(page,index) in pages" :class="[page.urlName,{'hasSelect': page.select}]" v-on:click="selectTag(index)">
+        <div class="ul nav">
+            <div v-for="(page,index) in pages" :class="['pageList',page.urlName,{'hasSelect': page.select}]" v-on:click="selectTag(index)">
                 <router-link :to="page.urlName">{{page.name}}</router-link>
-            </li>
-        </ul>
+            </div>
+        </div>
     </div>
 </template>
 <script>
 export default{
     data () {
         return {
-            banner: {
-                name:"宽带无线通信业务评估分析与展示系统",
-            },
+            name:"宽带无线通信业务评估分析与展示系统",
             pages: [
                 {name:"栅格展示",urlName:"map-rectangle",select: true},
                 {name:"资源利用率",urlName:"resource-rate",select: false},
@@ -32,13 +30,23 @@ export default{
             return new Date().toLocaleDateString().replace(/\//g,"-");
         }
     },
+    // watch:{
+    //     pages: {
+    //         deep: true,
+    //         handler () {
+    //             console.log("change");
+    //         }
+    //     }
+    // },
     methods: {
         selectTag (index) {
-            this.pages.forEach(function(item){
-                item.select = false;
-            })
-            this.pages[index].select = true;
-            // console.log(index,this.pages[index].select)
+            // this.pages[index].select = true;
+            // debugger;
+            // return;
+            for(var i = 0,len = this.pages.length;i < len; i++) {
+                // this.$set(this.pages,i,{name:this.pages[i].name,urlName:this.pages[i].urlName,select:(i === index)});
+                this.pages[i].select = (i === index);
+            }
         }
     }
 }
@@ -76,12 +84,11 @@ export default{
     padding: 0;
     height:45px;/*有高度不用另外设置BFC*/
     width: 100%;
-    list-style-type: none;
     text-align:center;
     background-color:#D0E9FF;
 }
 
-.nav li {
+.nav .pageList {
     display:inline-block;
     float:left;
     font-weight: bold;
@@ -91,16 +98,16 @@ export default{
     height:100%;
 }
 
-.nav li:hover {
+.nav .pageList:hover {
     background-color: #8ECDFF;
     transition: 1s;
 }
 
-.nav li.hasSelect {
+.nav .hasSelect {
     background-color: #8ECDFF;
 }
 
-.nav li a {
+.nav .pageList a {
     display:inline-block;
     text-decoration: none;
     text-align: center;

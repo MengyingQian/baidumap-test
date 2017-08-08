@@ -4,22 +4,25 @@
         <div class="pageBody">
             <router-view class="task"></router-view>
             <baidu-map class="allmap"></baidu-map>
+            <tab-message class="tabMessage"></tab-message>
         </div>
-        <!-- <task-footer class="footer"></task-footer> -->
+        <task-footer class="footer"></task-footer>
     </div>
 </template>
 
 <script>
-import header from './components/header/header.vue'
-import footer from './components/footer/footer.vue'
+import taskHeader from './components/header/taskHeader.vue'
+import taskFooter from './components/footer/taskFooter.vue'
 import baiduMap from './components/baidu-map/baidu-map.vue'
+import tabMessage from './components/tab-message/tab-message.vue'
 
 export default {
     name: 'app',
     components: {
-        'task-header': header,
-        'task-footer': footer,
-        'baiduMap': baiduMap
+        'taskHeader': taskHeader,
+        'task-footer': taskFooter,
+        'baidu-map': baiduMap,
+        'tabMessage':tabMessage
     }
 }
 </script>
@@ -59,6 +62,12 @@ export default {
 
 .allmap {
     flex: 1 0 auto;
+}
+
+.tabMessage {
+    position: absolute;
+    right:0;
+    top:120px;
 }
 
 /*页脚样式*/

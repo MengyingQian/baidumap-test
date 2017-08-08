@@ -7,14 +7,13 @@ import mutations from './mutations.js'
 Vue.use(Vuex)
 
 const vuexStore = {
-	state: {
-		map: {},
-		count: 1
-	},
-	mutations,
-	getters,
-	actions,
-	strict: true
+    state: {
+        bounds: {}
+    },
+    mutations,
+    getters,
+    actions,
+    strict: true
 }
 
 const store = new Vuex.Store(vuexStore)
