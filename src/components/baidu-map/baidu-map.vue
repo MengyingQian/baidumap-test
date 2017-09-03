@@ -9,8 +9,19 @@ export default {
             map: {}
         }
     },
-    computed: {},
-    watch: {},
+    computed: {
+        clearMap () {
+            return this.$store.state.clearMap;
+        }
+    },
+    watch: {
+        clearMap (newVal) {
+            if(newVal === true) {
+                this.remove_overlay();
+                this.$store.commit("clearMap",false);
+            }
+        }
+    },
     methods: {
         //初始化地图
         init (state) {
@@ -25,7 +36,7 @@ export default {
             _map.addControl(top_right_navigation);
             // 左下角，添加比例尺
             var top_right_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_RIGHT });
-            map.addControl(top_right_control); 
+            _map.addControl(top_right_control); 
             //改变地图显示区域会有两种操作，平移与缩放
             //地图移动时改变时获取范围
             _map.addEventListener('moveend', self.getBoundArea);
@@ -34,8 +45,8 @@ export default {
             this.map = _map;
         },
         //清除所有标记
-        remove_overlay (state){
-            state.map.clearOverlays();        
+        remove_overlay (){
+            this.map.clearOverlays();        
         },
         getBoundArea () {
             //可以考虑函数节流
@@ -43,7 +54,7 @@ export default {
         }
     },
     mounted () {
-        this.init()
+        this.init();
     },
 }
 </script>

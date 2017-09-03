@@ -45,7 +45,7 @@
                 <label>各方格求平均</label>
                 <input type="checkbox" class='average' v-model="formData.isAverage"/>
             </p>
-            <input class="submit" type="submit"  value="确定"  />
+            <button @click="search">确定</button>
         </div>
     </div>
 </template>

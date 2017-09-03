@@ -8,7 +8,9 @@ Vue.use(Vuex)
 
 const vuexStore = {
     state: {
-        bounds: {}
+        bounds: {},
+        clearMap: false,
+        showTab: false
     },
     mutations,
     getters,

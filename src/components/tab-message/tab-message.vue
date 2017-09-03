@@ -1,6 +1,6 @@
 <template>
-    <div class="tabMessage" >
-        <div class='shut'></div>
+    <div class="tabMessage" v-if="showTab">
+        <span class='shut' @click="shutTab"></span>
         <h2>台站信息展示</h2>
         <div class="tab"> 
         <!-- 选项卡 -->
