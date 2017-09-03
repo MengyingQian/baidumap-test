@@ -20,9 +20,12 @@ export default {
             var point = new BMap.Point(106.76355,26.634111);
             _map.centerAndZoom(point, 15);
             _map.enableScrollWheelZoom(true);
-            var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); 
             //右上角，添加默认缩放平移控件     
+            var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); 
             _map.addControl(top_right_navigation);
+            // 左下角，添加比例尺
+            var top_right_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_RIGHT });
+            map.addControl(top_right_control); 
             //改变地图显示区域会有两种操作，平移与缩放
             //地图移动时改变时获取范围
             _map.addEventListener('moveend', self.getBoundArea);

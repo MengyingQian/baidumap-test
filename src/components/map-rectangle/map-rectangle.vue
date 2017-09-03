@@ -29,17 +29,17 @@
             </p>
             <p>
                 <label>开始时间</label>
-                <input type="date" class="dl" v-model="formData.startDay" placeholder="2016/07/19"/>
-                <input type="time" class="tl" v-model="formData.startTime" placeholder="00:00"/>
+                <input type="date" class="dl" v-model="formData.startDay"/>
+                <input type="time" class="tl" v-model="formData.startTime"/>
             </p>
             <p>
                 <label>结束时间</label>
-                <input type="date" class="dh" v-model="formData.endDay" placeholder="2016/07/19"/>
-                <input type="time" class="th" v-model="formData.endTime" placeholder="05:00"/><br>
+                <input type="date" class="dh" v-model="formData.endDay"/>
+                <input type="time" class="th" v-model="formData.endTime"/><br>
             </p>
             <p>
                 <label>网格边长</label>
-                <input type="number" class="sideLength" min="1" max="10" v-model="formData.sideLength" value="1"/>Km
+                <input type="number" class="sideLength" min="1" max="10" v-model="formData.sideLength"/>Km
             </p>
             <p>
                 <label>各方格求平均</label>
