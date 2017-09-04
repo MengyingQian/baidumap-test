@@ -7,10 +7,7 @@ export default {
                 corporation: "中国移动",//运营商
                 system: "LTE",//基站类型
                 service: "all",//业务类型
-                startDay: null,
-                startTime: "00:00",
-                endDay: null,
-                endTime: "05:00",
+                dateRange: [],
                 sideLength: "1",
                 isAverage: true
             },
@@ -27,6 +24,7 @@ export default {
             return "" + year + "/" + month<10?"0"+month:month + "/" + date<10?"0"+date:date;
         },
         search () {
+            var that = this;
             //参数有效性检查
             //时间检查
             
@@ -46,14 +44,15 @@ export default {
                 alert("当前地图方格过多请重新选择网格大小");
                 return;
             }
-            // var systemData = {
-            //     startTime : dl+' '+tl,
-            //     endTime : dh+' '+th,
-            //     corporation : corporation,
-            //     system : system,
-            //     service : service,
-            //     props : props
-            // };
+
+
+            var params = {
+                startTime : that.formData.dateRange[0],
+                endTime : that.formData.dateRange[0],
+                corporation : that.formData.corporation,
+                system : that.formData.system,
+                service : that.formData.service,
+            };
 
             //重置地图
             this.$store.commit("clearMap",true); 
@@ -66,9 +65,6 @@ export default {
     beforeMount () {
         //初始化设置
         var that = this;
-        var day = new Date();
-        that.formData.endDay = that.formatDate(day)
-        that.formData.startDay = that.formatDate(day.setDate(day.getDate()-7));
         // var params = {
         //     system:'LTE',
         //     attr:'业务时间'
