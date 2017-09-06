@@ -47,11 +47,13 @@ export default {
 
 
             var params = {
-                startTime : that.formData.dateRange[0],
-                endTime : that.formData.dateRange[0],
-                corporation : that.formData.corporation,
-                system : that.formData.system,
-                service : that.formData.service,
+                startTime: that.formData.dateRange[0],
+                endTime: that.formData.dateRange[1],
+                corporation: that.formData.corporation,
+                system: that.formData.system,
+                service: that.formData.service,
+                sideLength: that.formData.sideLength,
+                isAverage: that.formData.isAverage
             };
 
             //重置地图
