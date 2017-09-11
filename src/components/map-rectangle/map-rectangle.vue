@@ -63,9 +63,9 @@
             <el-form-item label="业务类型">
                 <el-select v-model="formData.service" placeholder="请选择" class="short-input form-input">
                     <el-option label="全部" value="all"></el-option>
-                    <el-option label="语音" value="中国联通"></el-option>
-                    <el-option label="短信" value="中国电信"></el-option>
-                    <el-option label="分组域数据" value="中国电信"></el-option>
+                    <el-option label="语音" value="voice"></el-option>
+                    <el-option label="短信" value="note"></el-option>
+                    <el-option label="分组域数据" value="dataTraffic"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="时间范围">
@@ -84,7 +84,7 @@
             <el-form-item label="各方格求平均">
                 <el-checkbox v-model="formData.isAverage" checked class="form-input">各方格求平均</el-checkbox>
             </el-form-item>
-            <el-button @click="search" class="search-button">查询</el-button>
+            <el-button @click="testConnect" class="search-button">查询</el-button>
         </el-form>
     </div>
 </template>

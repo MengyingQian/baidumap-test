@@ -45,10 +45,9 @@ export default {
                 return;
             }
 
-
             var params = {
                 startTime : that.formData.dateRange[0],
-                endTime : that.formData.dateRange[0],
+                endTime : that.formData.dateRange[1],
                 corporation : that.formData.corporation,
                 system : that.formData.system,
                 service : that.formData.service,
@@ -59,7 +58,10 @@ export default {
             //关闭弹窗
             this.$store.commit("setShowTab",false); 
             //发送请求
-            $$EventBus.emit("attrQuery",params);
+            $$model.aggregate(params,function(data){
+                console.log("Response",data)
+            })
+            // $$EventBus.emit("attrQuery",params);
         }
     },
     beforeMount () {
