@@ -84,7 +84,7 @@
             <el-form-item label="各方格求平均">
                 <el-checkbox v-model="formData.isAverage" checked class="form-input">各方格求平均</el-checkbox>
             </el-form-item>
-            <el-button @click="testConnect" class="search-button">查询</el-button>
+            <el-button @click="search" class="search-button">查询</el-button>
         </el-form>
     </div>
 </template>

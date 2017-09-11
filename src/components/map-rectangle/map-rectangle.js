@@ -37,20 +37,38 @@ export default {
             var column = parseInt((bsne.lng-bssw.lng)/(minLng*this.sideLength));//列数目
             var row = parseInt((bsne.lat-bssw.lat)/(minLat*this.sideLength));//行数目
             if(column<1||row<1){
-                alert("当前地图可视范围过小请重新选择网格大小");
+                this.$message({
+                    showClose: true,
+                    message: '当前地图可视范围过小请重新选择网格大小',
+                    type: 'error'
+                });
                 return;
             }
             if(column>10||row>5){
-                alert("当前地图方格过多请重新选择网格大小");
+                this.$message({
+                    showClose: true,
+                    message: '当前地图方格过多请重新选择网格大小',
+                    type: 'error'
+                });
+                return;
+            }
+            if(that.formData.dateRange.length === 0){
+                this.$message({
+                    showClose: true,
+                    message: '请选择查询时间',
+                    type: 'error'
+                });
                 return;
             }
 
             var params = {
-                startTime : that.formData.dateRange[0],
-                endTime : that.formData.dateRange[1],
-                corporation : that.formData.corporation,
-                system : that.formData.system,
-                service : that.formData.service,
+                startTime: that.formData.dateRange[0],
+                endTime: that.formData.dateRange[1],
+                corporation: that.formData.corporation,
+                system: that.formData.system,
+                service: that.formData.service,
+                sideLength: that.formData.sideLength,
+                isAverage: that.formData.isAverage
             };
 
             //重置地图
@@ -58,10 +76,7 @@ export default {
             //关闭弹窗
             this.$store.commit("setShowTab",false); 
             //发送请求
-            $$model.aggregate(params,function(data){
-                console.log("Response",data)
-            })
-            // $$EventBus.emit("attrQuery",params);
+            $$EventBus.$emit("attrQuery",params);
         }
     },
     beforeMount () {

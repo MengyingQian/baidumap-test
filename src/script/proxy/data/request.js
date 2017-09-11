@@ -11,6 +11,7 @@ function sendData (url,params,fn) {
 	        }
 	    }
 	}
+	console.log("url",url)
 	xhr.open("post",url,true);
 	xhr.withCredentials = true;
 	xhr.setRequestHeader("Content-type","application/json; charset=utf-8");

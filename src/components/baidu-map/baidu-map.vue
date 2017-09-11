@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import $$EventBus from "../../script/EventBus.js"
+
 export default {
     data () {
         return {
@@ -43,6 +45,7 @@ export default {
             //地图缩放级别改变时获取显示范围
             _map.addEventListener('zoomend', self.getBoundArea);
             this.map = _map;
+            this.getBoundArea();
         },
         //清除所有标记
         remove_overlay (){
@@ -56,5 +59,12 @@ export default {
     mounted () {
         this.init();
     },
+    beforeMount () {
+        $$EventBus.$on("attrQuery",function(params){
+            $$model.aggregate(params,function(data){
+                console.log("Response",data)
+            })
+        });
+    }
 }
 </script>
