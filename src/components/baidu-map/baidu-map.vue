@@ -4,6 +4,7 @@
 
 <script>
 import $$EventBus from "../../script/EventBus.js"
+import $$model from "../../script/model.js"
 
 export default {
     data () {
@@ -60,7 +61,7 @@ export default {
         this.init();
     },
     beforeMount () {
-        $$EventBus.$on("attrQuery",function(params){
+        $$EventBus.$on("mapRectangle",function(params){
             $$model.aggregate(params,function(data){
                 console.log("Response",data)
             })

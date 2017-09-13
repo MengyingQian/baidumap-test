@@ -1,9 +1,15 @@
-import domain from "../domain.js"
+import $$domain from "../domain.js"
 import $$request from "./data/request.js"
 
-function send (params,fn) {
-	var url = domain + "aggregate";
-	$$request(url,params,fn);
+module.exports = function (params,fn) {
+	$$request.ajax({
+		url: $$domain + "mapRectangle",
+        type: 'POST',
+		data: params,
+		withCredentials: true,
+        contentType: 'application/json',
+		complete: function (data) {
+		    fn(data);
+		}
+	});
 }
-
-module.exports = send;

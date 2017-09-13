@@ -1,21 +1,22 @@
-function sendData (url,params,fn) {
+function sendData (params) {
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function () {
 	    if (xhr.readyState==4){
 	        if (xhr.status==200){
 	            // ...our code here...
-	            fn&&fn(xhr.responseText);
+	            params.complete(xhr.responseText);
 	        }
 	        else{
 	            console.log("Problem retrieving XML data");
 	        }
 	    }
 	}
-	console.log("url",url)
-	xhr.open("post",url,true);
-	xhr.withCredentials = true;
-	xhr.setRequestHeader("Content-type","application/json; charset=utf-8");
-	xhr.send(JSON.stringify(params));
+	xhr.open(params.type,params.url,true);
+	xhr.withCredentials = params.withCredentials;
+	xhr.setRequestHeader("Content-type",params.contentType);
+	xhr.send(JSON.stringify(params.data));
 }
 
-export default sendData
+export default {
+	ajax: sendData
+}

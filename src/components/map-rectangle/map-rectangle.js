@@ -62,8 +62,7 @@ export default {
             }
 
             var params = {
-                startTime: that.formData.dateRange[0],
-                endTime: that.formData.dateRange[1],
+                dateRange: that.formData.dateRange,
                 corporation: that.formData.corporation,
                 system: that.formData.system,
                 service: that.formData.service,
@@ -76,7 +75,7 @@ export default {
             //关闭弹窗
             this.$store.commit("setShowTab",false); 
             //发送请求
-            $$EventBus.$emit("attrQuery",params);
+            $$EventBus.$emit("mapRectangle",params);
         }
     },
     beforeMount () {
