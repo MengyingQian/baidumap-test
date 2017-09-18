@@ -1,8 +1,8 @@
 function getPoxy (type,params,fn) {
     var result;
     switch (type) {
-        case "aggregate":
-            result = require("./proxy/aggregate.js");
+        case "getRectangleInfo":
+            result = require("./proxy/getRectangleInfo.js");
             break;
     }
     result(params,fn);

@@ -9,7 +9,8 @@ module.exports = function (params,fn) {
 		withCredentials: true,
         contentType: 'application/json',
 		complete: function (data) {
-		    fn(data);
+			if (data.code != 0) throw data.msg
+		    fn&&fn(data.data);
 		}
 	});
 }

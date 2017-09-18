@@ -1,8 +1,8 @@
 import proxy from "./proxy.js"
 
 var model = {
-    aggregate (params,fn) {
-        proxy("aggregate",params,fn);
+    getRectangleInfo (params,fn) {
+        proxy("getRectangleInfo",params,fn);
     }
 }
 export default model

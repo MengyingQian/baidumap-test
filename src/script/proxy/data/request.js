@@ -4,7 +4,7 @@ function sendData (params) {
 	    if (xhr.readyState==4){
 	        if (xhr.status==200){
 	            // ...our code here...
-	            params.complete(xhr.responseText);
+	            params.complete(JSON.parse(xhr.responseText));
 	        }
 	        else{
 	            console.log("Problem retrieving XML data");
