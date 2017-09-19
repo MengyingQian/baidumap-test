@@ -7,7 +7,8 @@ export default {
             map: {},
             rectangleArr: [],
             selectRectangle: null,
-            selectPoint: null
+            selectPoint: null,
+            isAverage: false
         }
     },
     methods: {
@@ -43,57 +44,51 @@ export default {
         },
         mapRectangle (data) { // mapRactangle页面调用
             var that = this;
-            this.rectangleArr = [];
-            for (let i=0,len=data.length;i<len;i++) {
-                let searchBox = data[i].searchBox;
-                let baseInfo = data[i].baseInfo;
-
-                that.drawRectangle(searchBox,"mapRectangle");//绘制矩形
-                if (baseInfo.length != 0) {
-                    that.drawPoint(baseInfo,i,"mapRectangle");
-                }
-            }
+            that.drawRectangle(data.searchBox,"mapRectangle");//绘制矩形
+            that.drawPoint(data.baseInfo,"mapRectangle")
         },
         drawRectangle (searchBox,page) {
             var that = this;
             //绘制矩形
-            let rectangle = new BMap.Polygon([
-                new BMap.Point(searchBox[0],searchBox[1]),
-                new BMap.Point(searchBox[0],searchBox[3]),
-                new BMap.Point(searchBox[2],searchBox[3]),
-                new BMap.Point(searchBox[2],searchBox[1])
-            ], {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
-            rectangle.setFillOpacity(0.1);
-            that.rectangleArr.push(rectangle);
-            rectangle["data-index"] = [that.rectangleArr.indexOf(rectangle)];//为栅格定义index属性，表明其在数据中的位置
-            rectangle.addEventListener("click",function(){
-                if (that.selectRectangle) {
-                   that.selectRectangle.setFillColor("#FFFFFF");//取消上一个被选中栅格的特效
-                   that.selectRectangle.setFillOpacity(0.1); 
-               }
-                that.selectRectangle = this;
-                that.selectRectangle.setFillColor("#00FFFF");//为本次选中的栅格增加特效
-                that.selectRectangle.setFillOpacity(0.5);
-                $$EventBus.$emit("showMessage",{
-                    index: that.selectRectangle["data-index"],
-                    type: "rectangle",
-                    page: page
-                })//设置消息弹窗
-            })
-            that.map.addOverlay(rectangle);//增加矩形
-            rectangle = null;
+            for (let i=0,len=searchBox.length;i < len;i++) {
+                let rectangle = new BMap.Polygon([
+                    new BMap.Point(searchBox[i][0],searchBox[i][1]),
+                    new BMap.Point(searchBox[i][0],searchBox[i][3]),
+                    new BMap.Point(searchBox[i][2],searchBox[i][3]),
+                    new BMap.Point(searchBox[i][2],searchBox[i][1])
+                ], {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
+                rectangle.setFillOpacity(0.1);
+                rectangle["data-index"] = i;//为栅格定义index属性，表明其在数据中的位置
+                rectangle.addEventListener("click",function(){
+                    if (that.selectRectangle) {
+                        that.selectRectangle.setFillColor("#FFFFFF");//取消上一个被选中栅格的特效
+                        that.selectRectangle.setFillOpacity(0.1); 
+                    }
+                    that.selectRectangle = this;
+                    that.selectRectangle.setFillColor("#00FFFF");//为本次选中的栅格增加特效
+                    that.selectRectangle.setFillOpacity(0.5);
+                    $$EventBus.$emit("showMsg",{
+                        index: that.selectRectangle["data-index"],
+                        type: "rectangle",
+                        page: page,
+                        isAverage: that.isAverage
+                    })//设置消息弹窗
+                })
+                that.map.addOverlay(rectangle);//增加矩形
+                rectangle = null;
+            }
         },
-        drawPoint (baseInfo,index_rectangle = -1,page) {// 绘制基站点
+        drawPoint (baseInfo,page) {// 绘制基站点
             var color = 0;
             var that = this;
-            for (var i = 0; i < baseInfo.length; i++) {
+            for (var i = 0,len = baseInfo.length;i < len; i++) {
                 var myIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25), {  
                                 offset: new BMap.Size(10, 25), // 指定定位位置  
                                 imageOffset: new BMap.Size(0, 0-color*25 ) // 设置图片偏移  
                             }); 
                 var _marker = new BMap.Marker(new BMap.Point(baseInfo[i].geom.coordinates[0], baseInfo[i].geom.coordinates[1]),{icon:myIcon});
                 that.map.addOverlay(_marker);//添加标注
-                _marker["data-index"] = [index_rectangle,i];//为Mark定义index属性，表明其在数据中的位置
+                _marker["data-index"] = i;//为Mark定义index属性，表明其在数据中的位置
                 _marker.addEventListener("click", function(e) {
                     // console.log(this["data-index"])
                     if (that.selectPoint) {
@@ -101,7 +96,7 @@ export default {
                     }
                     that.selectPoint = this;
                     that.selectPoint.setAnimation(BMAP_ANIMATION_BOUNCE);
-                    $$EventBus.$emit("showMessage",{
+                    $$EventBus.$emit("showMsg",{
                         index: that.selectPoint["data-index"],
                         type: "point",
                         page: page
@@ -116,9 +111,10 @@ export default {
     },
     beforeMount () {
         let that = this;
-        $$EventBus.$on("mapRectangle",function(data){
+        $$EventBus.$on("mapRectangle",function(data,isAverage){
+            that.isAverage = isAverage;
             that.remove_overlay();
-            that.mapRectangle.call(that,data)
+            that.mapRectangle.call(that,data,isAverage)
         });
     }
 }

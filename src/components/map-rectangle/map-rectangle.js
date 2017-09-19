@@ -67,14 +67,13 @@ export default {
                 corporation: that.formData.corporation,
                 system: that.formData.system,
                 service: that.formData.service,
-                sideLength: that.formData.sideLength,
-                isAverage: that.formData.isAverage
+                sideLength: that.formData.sideLength
             };
             //发送请求
             $$model.getRectangleInfo(params,function(data){
                 that.$store.commit('storeSearchData',data);
                 //触发map中的监听事件
-                $$EventBus.$emit("mapRectangle",data);
+                $$EventBus.$emit("mapRectangle",data,that.formData.isAverage);
             })
         }
     },
