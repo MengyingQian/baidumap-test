@@ -5,7 +5,9 @@ export default {
     data () {
         return {
             map: {},
-            rectangleArr: []
+            rectangleArr: [],
+            selectRectangle: null,
+            selectPoint: null
         }
     },
     methods: {
@@ -39,20 +41,20 @@ export default {
             //可以考虑函数节流
             this.$store.commit('setBounds',this.map.getBounds())
         },
-        mapRectangle (data) {
+        mapRectangle (data) { // mapRactangle页面调用
             var that = this;
             this.rectangleArr = [];
             for (let i=0,len=data.length;i<len;i++) {
                 let searchBox = data[i].searchBox;
                 let baseInfo = data[i].baseInfo;
 
-                that.drawRectangle(searchBox,baseInfo);//绘制矩形
+                that.drawRectangle(searchBox,"mapRectangle");//绘制矩形
                 if (baseInfo.length != 0) {
-                    that.drawPoint(baseInfo,i);
+                    that.drawPoint(baseInfo,i,"mapRectangle");
                 }
             }
         },
-        drawRectangle (searchBox,baseInfo) {
+        drawRectangle (searchBox,page) {
             var that = this;
             //绘制矩形
             let rectangle = new BMap.Polygon([
@@ -63,25 +65,25 @@ export default {
             ], {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
             rectangle.setFillOpacity(0.1);
             that.rectangleArr.push(rectangle);
+            rectangle["data-index"] = [that.rectangleArr.indexOf(rectangle)];//为栅格定义index属性，表明其在数据中的位置
             rectangle.addEventListener("click",function(){
-                that.selectRectangle(that.rectangleArr.indexOf(this));
+                if (that.selectRectangle) {
+                   that.selectRectangle.setFillColor("#FFFFFF");//取消上一个被选中栅格的特效
+                   that.selectRectangle.setFillOpacity(0.1); 
+               }
+                that.selectRectangle = this;
+                that.selectRectangle.setFillColor("#00FFFF");//为本次选中的栅格增加特效
+                that.selectRectangle.setFillOpacity(0.5);
+                $$EventBus.$emit("showMessage",{
+                    index: that.selectRectangle["data-index"],
+                    type: "rectangle",
+                    page: page
+                })//设置消息弹窗
             })
             that.map.addOverlay(rectangle);//增加矩形
             rectangle = null;
         },
-        selectRectangle (selectIndex) {
-            this.rectangleArr.forEach(function(item,index){
-                if (selectIndex === index) {
-                    item.setFillColor("#00FFFF");
-                    item.setFillOpacity(0.5);
-                    //弹窗信息设置
-                } else {
-                    item.setFillColor("#FFFFFF");
-                    item.setFillOpacity(0.1);
-                }
-            })
-        },
-        drawPoint (baseInfo,index_rectangle) {// 绘制基站点
+        drawPoint (baseInfo,index_rectangle = -1,page) {// 绘制基站点
             var color = 0;
             var that = this;
             for (var i = 0; i < baseInfo.length; i++) {
@@ -91,10 +93,19 @@ export default {
                             }); 
                 var _marker = new BMap.Marker(new BMap.Point(baseInfo[i].geom.coordinates[0], baseInfo[i].geom.coordinates[1]),{icon:myIcon});
                 that.map.addOverlay(_marker);//添加标注
-                _marker["data-index"] = [index_rectangle,i];
+                _marker["data-index"] = [index_rectangle,i];//为Mark定义index属性，表明其在数据中的位置
                 _marker.addEventListener("click", function(e) {
-                    // console.log(this.index_rectangle)
-                    console.log(this["data-index"])
+                    // console.log(this["data-index"])
+                    if (that.selectPoint) {
+                        that.selectPoint.setAnimation();
+                    }
+                    that.selectPoint = this;
+                    that.selectPoint.setAnimation(BMAP_ANIMATION_BOUNCE);
+                    $$EventBus.$emit("showMessage",{
+                        index: that.selectPoint["data-index"],
+                        type: "point",
+                        page: page
+                    })//设置消息弹窗
                 });
                 _marker = null;  //减少引用数，减少内存占用
             }

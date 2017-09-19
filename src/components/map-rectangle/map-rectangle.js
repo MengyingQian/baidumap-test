@@ -72,6 +72,7 @@ export default {
             };
             //发送请求
             $$model.getRectangleInfo(params,function(data){
+                that.$store.commit('storeSearchData',data);
                 //触发map中的监听事件
                 $$EventBus.$emit("mapRectangle",data);
             })
