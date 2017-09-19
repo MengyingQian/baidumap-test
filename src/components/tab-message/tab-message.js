@@ -1,17 +1,13 @@
 export default {
     data () {
         return {
-        }
-    },
-    computed: {
-        showTab () {
-            return this.$store.state.showTab;
+            showTab: false
         }
     },
     watch: {},
     methods: {
         shutTab () {
-            this.$store.commit("setShowTab",false);
+            this.showTab = false;
         }
     },
     beforeMount () {}

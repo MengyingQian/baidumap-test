@@ -70,11 +70,6 @@ export default {
                 sideLength: that.formData.sideLength,
                 isAverage: that.formData.isAverage
             };
-
-            //重置地图
-            this.$store.commit("clearMap",true); 
-            //关闭弹窗
-            this.$store.commit("setShowTab",false); 
             //发送请求
             $$model.getRectangleInfo(params,function(data){
                 //触发map中的监听事件

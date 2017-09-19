@@ -8,19 +8,6 @@ export default {
             rectangleArr: []
         }
     },
-    computed: {
-        clearMap () {
-            return this.$store.state.clearMap;
-        }
-    },
-    watch: {
-        clearMap (newVal) {
-            if(newVal === true) {
-                this.remove_overlay();
-                this.$store.commit("clearMap",false);
-            }
-        }
-    },
     methods: {
         //初始化地图
         init (state) {
@@ -61,7 +48,7 @@ export default {
 
                 that.drawRectangle(searchBox,baseInfo);//绘制矩形
                 if (baseInfo.length != 0) {
-                    that.drawPoint(baseInfo);
+                    that.drawPoint(baseInfo,i);
                 }
             }
         },
@@ -75,11 +62,12 @@ export default {
                 new BMap.Point(searchBox[2],searchBox[1])
             ], {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});
             rectangle.setFillOpacity(0.1);
-            this.rectangleArr.push(rectangle);
+            that.rectangleArr.push(rectangle);
             rectangle.addEventListener("click",function(){
                 that.selectRectangle(that.rectangleArr.indexOf(this));
             })
-            this.map.addOverlay(rectangle);//增加矩形
+            that.map.addOverlay(rectangle);//增加矩形
+            rectangle = null;
         },
         selectRectangle (selectIndex) {
             this.rectangleArr.forEach(function(item,index){
@@ -93,15 +81,21 @@ export default {
                 }
             })
         },
-        drawPoint (baseInfo) {// 绘制基站点
+        drawPoint (baseInfo,index_rectangle) {// 绘制基站点
             var color = 0;
-            for (var i = 0; i < baseInfo.length; i ++) {
-                // var myIcon = new BMap.Icon("images/markers1.png", new BMap.Size(23, 25), {  
-                //                 offset: new BMap.Size(10, 25), // 指定定位位置  
-                //                 imageOffset: new BMap.Size(0, 0-color*25 ) // 设置图片偏移  
-                //             }); 
-                var _marker = new BMap.Marker(new BMap.Point(baseInfo[i].geom.coordinates[0], baseInfo[i].geom.coordinates[1]));
-                this.map.addOverlay(_marker);//添加标注
+            var that = this;
+            for (var i = 0; i < baseInfo.length; i++) {
+                var myIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25), {  
+                                offset: new BMap.Size(10, 25), // 指定定位位置  
+                                imageOffset: new BMap.Size(0, 0-color*25 ) // 设置图片偏移  
+                            }); 
+                var _marker = new BMap.Marker(new BMap.Point(baseInfo[i].geom.coordinates[0], baseInfo[i].geom.coordinates[1]),{icon:myIcon});
+                that.map.addOverlay(_marker);//添加标注
+                _marker["data-index"] = [index_rectangle,i];
+                _marker.addEventListener("click", function(e) {
+                    // console.log(this.index_rectangle)
+                    console.log(this["data-index"])
+                });
                 _marker = null;  //减少引用数，减少内存占用
             }
         }
@@ -112,6 +106,7 @@ export default {
     beforeMount () {
         let that = this;
         $$EventBus.$on("mapRectangle",function(data){
+            that.remove_overlay();
             that.mapRectangle.call(that,data)
         });
     }
