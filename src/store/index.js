@@ -9,7 +9,8 @@ Vue.use(Vuex)
 const vuexStore = {
     state: {
         bounds: {},
-        searchData: []
+        searchData: {},
+        searchParams: {}
     },
     mutations,
     getters,

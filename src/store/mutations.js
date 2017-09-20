@@ -8,5 +8,9 @@ export default {
     //更改查询数据
     storeSearchData (state,data) {
         state.searchData = data;
+    },
+    //更改查询数据
+    storeSearchParams (state,data) {
+        state.searchParams = data;
     }
 }

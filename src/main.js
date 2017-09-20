@@ -6,10 +6,13 @@ import router from './router'
 import store from './store'
 import element from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
+import echarts from 'echarts'
 
 Vue.use(element)
 
 Vue.config.productionTip = false
+
+Vue.prototype.$echarts = echarts;
 
 /* eslint-disable no-new */
 new Vue({

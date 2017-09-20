@@ -7,8 +7,8 @@ export default {
                 corporation: "中国移动",//运营商
                 system: "LTE",//基站类型
                 service: "all",//业务类型
-                dateRange: ["2016-07-18T16:00:00.000Z","2016-07-18T18:00:00.000Z"],
-                sideLength: "1",
+                dateRange: ["2016-07-18T16:00:00.000Z","2016-07-18T24:00:00.000Z"],
+                sideLength: "2",
                 isAverage: true
             },
             Maxtime: "",
@@ -69,11 +69,16 @@ export default {
                 service: that.formData.service,
                 sideLength: that.formData.sideLength
             };
+            $$EventBus.$emit("clearOverlays");
+            $$EventBus.$emit("hideMsg");
+
             //发送请求
             $$model.getRectangleInfo(params,function(data){
-                that.$store.commit('storeSearchData',data);
+                params.isAverage = that.formData.isAverage;
+                that.$store.commit('storeSearchParams',params);// 存储查询参数
+                that.$store.commit('storeSearchData',data);// 存储查询得到的数据
                 //触发map中的监听事件
-                $$EventBus.$emit("mapRectangle",data,that.formData.isAverage);
+                $$EventBus.$emit("mapRectangle",data);
             })
         }
     },

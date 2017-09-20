@@ -7,8 +7,7 @@ export default {
             map: {},
             rectangleArr: [],
             selectRectangle: null,
-            selectPoint: null,
-            isAverage: false
+            selectPoint: null
         }
     },
     methods: {
@@ -70,8 +69,7 @@ export default {
                     $$EventBus.$emit("showMsg",{
                         index: that.selectRectangle["data-index"],
                         type: "rectangle",
-                        page: page,
-                        isAverage: that.isAverage
+                        page: page
                     })//设置消息弹窗
                 })
                 that.map.addOverlay(rectangle);//增加矩形
@@ -112,9 +110,19 @@ export default {
     beforeMount () {
         let that = this;
         $$EventBus.$on("mapRectangle",function(data,isAverage){
-            that.isAverage = isAverage;
-            that.remove_overlay();
             that.mapRectangle.call(that,data,isAverage)
+        });
+        $$EventBus.$on("clearOverlays",function(){
+            that.map.clearOverlays();
+        });
+        $$EventBus.$on("clearSelect",function(){
+            if (that.selectRectangle) {
+                that.selectRectangle.setFillColor("#FFFFFF");//清除选中栅格特效
+                that.selectRectangle.setFillOpacity(0.1);
+            }
+            if (that.selectPoint) {
+                that.selectPoint.setAnimation();//清除选中点特效
+            }
         });
     }
 }
