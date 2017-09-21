@@ -1,7 +1,7 @@
 <template>
     <!-- 左侧菜单栏设置 -->
     <div class="leftMenu">
-        <h2>台站筛选选项</h2>
+        <p class="selectTitle">台站筛选选项</p>
             <!-- <p>
                 <label>台站类型</label>
                 <select class='corporation' v-model="formData.corporation">

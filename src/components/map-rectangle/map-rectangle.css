@@ -1,17 +1,33 @@
 /*左侧菜单*/
 .leftMenu{
-    border-right: 1px solid black;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     background-color: #F7F7F9;
     flex:0 0 340px;
-    text-align: center;
-    overflow-x:auto;/*横向拉条*/
-    overflow-y: auto;/*纵向拉条*/
+    overflow: hidden;
     white-space:nowrap;/*不换行*/
+    height: 40px;
+    transition: height 0.3s;
+    padding: 5px;
+}
+
+.leftMenu::-webkit-scrollbar {
+    display: none;
+}
+
+.leftMenu:hover {
+    height: 400px;
+}
+
+.selectTitle {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 10px 30px;
 }
 
 .leftMenu .form{
     margin:20px 0 0 5px;
-    text-align:left;
+    text-align: left;
 }
 
 .leftMenu .form label{

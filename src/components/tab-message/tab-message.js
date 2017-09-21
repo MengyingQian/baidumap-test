@@ -29,10 +29,50 @@ export default {
                     if (type === "rectangle") {
                         this.setRectangleMsg(index);
                     } else if(type === "point") {
-
+                        this.setPointMsg(index);
                     }
                     break;
             }
+        },
+        setPointMsg (index) {
+            var that = this;
+            this.echarts_abbrs = [];//echarts绘图列表设为空
+            var searchParams = this.$store.state.searchParams;
+            var baseInfo = this.$store.state.searchData.baseInfo[index];
+            this.message = [];
+            switch (searchParams.service) {
+                case "all":
+                    var abbrs = ["语音数据(分钟)","短信数据(条数)","LTE上行总流量(MByte)","LTE下行总流量(MByte)"];//获取所有应该展示的属性
+                    break;
+                case "voice":
+                    var abbrs = ["语音数据(分钟)"];
+                    break;
+                case "note":
+                    var abbrs = ["短信数据(条数)"];
+                    break;
+                case "all":
+                    var abbrs = ["LTE上行总流量(MByte)","LTE下行总流量(MByte)"];
+                    break;
+            }
+            abbrs.forEach(function(item,index){
+                that.echarts_abbrs.push("echarts_" + index);
+                setTimeout(() => {
+                    that.echartsMake(index,baseInfo["业务时间"],baseInfo[item],that.echartsAbbr(item));
+                })
+            })
+            var ignoreAbbrs = ["_id","编号","recIndex","__ob__"].concat(abbrs);//不予显示的属性组
+            var keys = Object.getOwnPropertyNames(baseInfo);
+            keys.forEach(function(item){
+                if (!Array.isArray(baseInfo[item])&&ignoreAbbrs.indexOf(item) ===-1) {
+                    if (item === "geom") {
+                        that.message.push("经度:" + baseInfo["geom"].coordinates[0]);
+                        that.message.push("纬度:" + baseInfo["geom"].coordinates[1]);
+                    } else {
+                        that.message.push(item + ":" + baseInfo[item]);
+                    }
+                }
+            })
+            that.showTab = true;
         },
         setRectangleMsg (index) {
             var that = this;
@@ -75,13 +115,13 @@ export default {
                     })
                 }
             }
-            that.message = "此栅格内共"+sum.num+"个台站";
+            that.message = ["此栅格内共"+sum.num+"个台站"];
             abbrs.forEach(function(item,index){
                 if (searchParams.isAverage) {
-                sum[item].forEach(function(it,index){
-                    sum[item][index] = sum[item][index]/sum.num;
-                })
-            }
+                    sum[item].forEach(function(it,index){
+                        sum[item][index] = sum[item][index]/sum.num;
+                    })
+                }
                 setTimeout(() => {
                     that.echartsMake(index,sum["业务时间"],sum[item],that.echartsAbbr(item));
                 })
@@ -162,7 +202,8 @@ export default {
             };
             var reg = /([^\(\)]+)/g;
             abbr.title = reg.exec(name)[1];//设置title
-            var yName = reg.exec(name)[1];//设置yName
+            var arr = reg.exec(name);
+            var yName = arr?arr[1]:"";//设置yName
             switch (yName) {
                 case "MByte":
                     abbr.yName = "流量(MByte)";

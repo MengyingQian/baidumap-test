@@ -56,7 +56,10 @@ export default {
 }
 
 .task {
-    flex: 0 0 340px;
+    z-index: 1;
+    position: absolute;
+    left: 50px;
+    top: 25px;
 }
 
 .allmap {
@@ -65,8 +68,8 @@ export default {
 
 .tabMessage {
     position: absolute;
-    right:0;
-    top:120px;
+    right: 0;
+    top: 0;
 }
 
 /*页脚样式*/

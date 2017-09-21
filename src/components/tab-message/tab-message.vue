@@ -8,7 +8,9 @@
             <span class="tab-hearder" :class="{'tab-hearder-active': selectTab === 'statistics'}" @click="selectTab='statistics'">统计信息</span>
             <span class="tab-hearder" :class="{'tab-hearder-active': selectTab === 'others'}" @click="selectTab='others'">其他</span>
 
-            <div class="tab-content message" v-show="selectTab === 'message'">{{message}}</div>
+            <div class="tab-content message" v-show="selectTab === 'message'">
+                <p v-for="item in message" class="message-item">{{item}}</p>
+            </div>
             <div class="tab-content statistics" v-show="selectTab === 'statistics'" ref="statistics">
                 <div v-for="item in echarts_abbrs" :class="[item,'echarts']"></div>
             </div>
@@ -21,7 +23,6 @@
 
 <style scoped>
 .tabMessage {  
-    max-height: 80%;
     padding-left:20px; 
     background-color:#F7F7F9; 
     border-top-left-radius: 5px;/*边角样式*/
@@ -59,12 +60,13 @@
 }
 
 .tab-content {
-    width:600px;
-    height:500px;
-    overflow-x:auto;/*横向拉条*/
+    width: 600px;
+    min-height: 500px;
+    max-height: 0.8vh;
+    overflow-x: auto;/*横向拉条*/
     overflow-y: auto;/*纵向拉条*/
-    word-break:keep-all;/*不换行*/
-    white-space:nowrap;/*不换行*/
+    word-break: keep-all;/*不换行*/
+    white-space: nowrap;/*不换行*/
     display: block;
     background: #ECF0F1;
 }
@@ -73,8 +75,8 @@
     transition: all 0.5s;
 }
 
-.message {
-    padding: 10px;
+.message,.others {
+    padding: 10px 10px 0 10px;
     font-family: arial,​tahoma,​宋体;
     font-size: 16px;
 }
@@ -87,5 +89,9 @@
 
 .tab-content::-webkit-scrollbar {
     display: none;
+}
+
+.message-item {
+    line-height: 30px;
 }
 </style>

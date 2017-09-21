@@ -10,6 +10,16 @@ export default {
             selectPoint: null
         }
     },
+    computed: {
+        getBounds () {//计算属性与watch配合监听显示范围的改变
+            return this.map.getBounds?this.map.getBounds():{};
+        }
+    },
+    watch: {
+        getBounds (newVal) {
+            this.$store.commit('setBounds',newVal)
+        }
+    },
     methods: {
         //初始化地图
         init (state) {
@@ -25,21 +35,12 @@ export default {
             // 左下角，添加比例尺
             var top_right_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_RIGHT });
             _map.addControl(top_right_control); 
-            //改变地图显示区域会有两种操作，平移与缩放
-            //地图移动时改变时获取范围
-            _map.addEventListener('moveend', self.getBoundArea);
-            //地图缩放级别改变时获取显示范围
-            _map.addEventListener('zoomend', self.getBoundArea);
             this.map = _map;
             this.getBoundArea();
         },
         //清除所有标记
         remove_overlay (){
             this.map.clearOverlays();        
-        },
-        getBoundArea () {
-            //可以考虑函数节流
-            this.$store.commit('setBounds',this.map.getBounds())
         },
         mapRectangle (data) { // mapRactangle页面调用
             var that = this;
@@ -62,6 +63,10 @@ export default {
                     if (that.selectRectangle) {
                         that.selectRectangle.setFillColor("#FFFFFF");//取消上一个被选中栅格的特效
                         that.selectRectangle.setFillOpacity(0.1); 
+                    }
+
+                    if (that.selectPoint) {
+                        that.selectPoint.setAnimation();
                     }
                     that.selectRectangle = this;
                     that.selectRectangle.setFillColor("#00FFFF");//为本次选中的栅格增加特效
@@ -89,6 +94,10 @@ export default {
                 _marker["data-index"] = i;//为Mark定义index属性，表明其在数据中的位置
                 _marker.addEventListener("click", function(e) {
                     // console.log(this["data-index"])
+                    if (that.selectRectangle) {
+                        that.selectRectangle.setFillColor("#FFFFFF");//取消上一个被选中栅格的特效
+                        that.selectRectangle.setFillOpacity(0.1); 
+                    }
                     if (that.selectPoint) {
                         that.selectPoint.setAnimation();
                     }
