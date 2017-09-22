@@ -11,10 +11,6 @@
     padding: 5px;
 }
 
-.leftMenu::-webkit-scrollbar {
-    display: none;
-}
-
 .leftMenu:hover {
     height: 400px;
 }
@@ -39,18 +35,6 @@
     font-size:14px;
 }
 
-/*.leftMenu .form input:not(.average):not(.shortInput){
-    display:inline-block;
-    text-align: center;
-    width: 100px;
-}
-
-.leftMenu .form .shortInput{
-    display:inline-block;
-    text-align: center;
-    width:70px;
-}*/
-
 .short-input {
     width: 120px;
 }
@@ -63,12 +47,3 @@
     float: right;
     margin-right: 50px;
 }
-/*.leftMenu .form .submit{
-    display:block;
-    margin-left: 200px;
-    width: 60px;
-    height:30px;
-    border-radius: 5px;
-    color:#FFFFFF;
-    background-color: #0b5ea5;
-}*/

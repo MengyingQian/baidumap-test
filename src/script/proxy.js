@@ -4,6 +4,9 @@ function getPoxy (type,params,fn) {
         case "getRectangleInfo":
             result = require("./proxy/getRectangleInfo.js");
             break;
+        case "getCoverageInfo":
+            result = require("./proxy/getCoverageInfo.js");
+            break;
     }
     result(params,fn);
 }

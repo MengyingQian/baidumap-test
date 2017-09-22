@@ -24,6 +24,9 @@ export default {
             return "" + year + "/" + month<10?"0"+month:month + "/" + date<10?"0"+date:date;
         },
         search () {
+            // 清空弹窗和地图
+            $$EventBus.$emit("clearOverlays");
+            $$EventBus.$emit("hideMsg");
             var that = this;
             //参数有效性检查
             
@@ -69,8 +72,6 @@ export default {
                 service: that.formData.service,
                 sideLength: that.formData.sideLength
             };
-            $$EventBus.$emit("clearOverlays");
-            $$EventBus.$emit("hideMsg");
 
             //发送请求
             $$model.getRectangleInfo(params,function(data){
@@ -84,7 +85,7 @@ export default {
     },
     beforeMount () {
         //初始化设置
-        var that = this;
+        // var that = this;
         // var params = {
         //     system:'LTE',
         //     attr:'业务时间'

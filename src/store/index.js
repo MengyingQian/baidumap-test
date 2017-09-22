@@ -8,7 +8,8 @@ Vue.use(Vuex)
 
 const vuexStore = {
     state: {
-        bounds: {},
+        bounds: {},// 地图视野
+        zoom: 18,// 地图缩放等级
         searchData: {},
         searchParams: {}
     },

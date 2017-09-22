@@ -12,7 +12,7 @@
                 <p v-for="item in message" class="message-item">{{item}}</p>
             </div>
             <div class="tab-content statistics" v-show="selectTab === 'statistics'" ref="statistics">
-                <div v-for="item in echarts_abbrs" :class="[item,'echarts']"></div>
+                <div v-for="(item,index) in echarts_abbrs" :class="['echarts_'+index,'echarts']"></div>
             </div>
             <div class="tab-content others" v-show="selectTab === 'others'"></div>  
         </div>

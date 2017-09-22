@@ -13,11 +13,17 @@ export default {
     computed: {
         getBounds () {//计算属性与watch配合监听显示范围的改变
             return this.map.getBounds?this.map.getBounds():{};
+        },
+        getZoom () {//监听地图缩放等级
+            return this.map.getZoom?this.map.getZoom():0;
         }
     },
     watch: {
         getBounds (newVal) {
             this.$store.commit('setBounds',newVal)
+        },
+        getZoom (newVal) {
+            this.$store.commit('setZoom',newVal)
         }
     },
     methods: {
@@ -36,7 +42,6 @@ export default {
             var top_right_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_RIGHT });
             _map.addControl(top_right_control); 
             this.map = _map;
-            this.getBoundArea();
         },
         //清除所有标记
         remove_overlay (){
@@ -46,6 +51,9 @@ export default {
             var that = this;
             that.drawRectangle(data.searchBox,"mapRectangle");//绘制矩形
             that.drawPoint(data.baseInfo,"mapRectangle")
+        },
+        coverage (data) {
+            // do something
         },
         drawRectangle (searchBox,page) {
             var that = this;
@@ -118,12 +126,11 @@ export default {
     },
     beforeMount () {
         let that = this;
-        $$EventBus.$on("mapRectangle",function(data,isAverage){
-            that.mapRectangle.call(that,data,isAverage)
-        });
+        // 清除地图覆盖物
         $$EventBus.$on("clearOverlays",function(){
             that.map.clearOverlays();
         });
+        // 清除栅格和基站的选中效果
         $$EventBus.$on("clearSelect",function(){
             if (that.selectRectangle) {
                 that.selectRectangle.setFillColor("#FFFFFF");//清除选中栅格特效
@@ -132,6 +139,14 @@ export default {
             if (that.selectPoint) {
                 that.selectPoint.setAnimation();//清除选中点特效
             }
+        });
+        // 监听栅格
+        $$EventBus.$on("mapRectangle",function(data,isAverage){
+            that.mapRectangle.call(that,data,isAverage)
+        });
+        // 监听覆盖分析
+        $$EventBus.$on("coverage",function(data,isAverage){
+            that.coverage.call(that,data,isAverage)
         });
     }
 }
