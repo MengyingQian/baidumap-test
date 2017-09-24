@@ -17,7 +17,7 @@ export default{
         return {
             name:"宽带无线通信业务评估分析与展示系统",
             pages: [
-                {name:"栅格展示",urlName:"map-rectangle",select: true},
+                {name:"栅格展示",urlName:"map-rectangle",select: false},
                 {name:"资源利用率",urlName:"resource-rate",select: false},
                 {name:"覆盖分析",urlName:"hot-map",select: false},
                 {name:"网络布局",urlName:"network-layout",select: false},
@@ -48,6 +48,18 @@ export default{
                 this.pages[i].select = (i === index);
             }
         }
+    },
+    beforeMount () {
+        var pathname = location.pathname.slice(1);
+        if (pathname === "") {
+            this.pages[0].select = true;
+            return;
+        }
+        this.pages.map(function(item){
+            if (item.urlName === pathname) {
+                item.select = true;
+            }
+        })
     }
 }
 </script>

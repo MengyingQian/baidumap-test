@@ -1,6 +1,6 @@
 <template>
     <!-- 左侧菜单栏设置 -->
-    <div id="leftMenu">
+    <div class="leftMenu">
         <p class="selectTitle">台站筛选选项</p>
         <el-form ref="form" :model="formData" label-width="100px">
             <el-form-item label="台站类型">
@@ -16,14 +16,13 @@
                     <el-option label="WCDMA" value="WCDMA"></el-option>
                     <el-option label="GSM" value="GSM"></el-option>
                 </el-select>
-                <!-- 测量间距可以默认，此处注释 -->
-                <el-form-item label="基站覆盖半径">
-                    <el-input v-model="formData.maxDistance" placeholder="请输入内容" class="short-input form-input">
-                        <template slot="append">米</template>
-                    </el-input>
-                </el-form-item>
             </el-form-item>
-            
+            <!-- 测量间距可以默认，此处注释 -->
+            <el-form-item label="基站覆盖半径">
+                <el-input v-model="formData.maxDistance" placeholder="请输入内容" class="short-input form-input">
+                    <template slot="append">米</template>
+                </el-input>
+            </el-form-item>
             <el-button @click="search" class="search-button">查询</el-button>
         </el-form>
     </div>
@@ -40,9 +39,9 @@
     flex:0 0 340px;
     overflow: hidden;
     white-space:nowrap;/*不换行*/
-    height: 40px;
+    height: 30px;
     transition: height 0.3s;
-    padding: 5px;
+    padding: 10px;
 }
 
 .leftMenu:hover {
@@ -52,7 +51,7 @@
 .selectTitle {
     font-size: 20px;
     font-weight: 800;
-    margin: 10px 30px;
+    margin: 0px 30px 20px;
 }
 
 .leftMenu .form{

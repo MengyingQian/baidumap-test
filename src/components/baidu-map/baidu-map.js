@@ -41,6 +41,9 @@ export default {
             // 左下角，添加比例尺
             var top_right_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_RIGHT });
             _map.addControl(top_right_control); 
+            // _map.addEventListener("click",function(e){
+            //     console.log(e.point.lng + "," + e.point.lat);
+            // });
             this.map = _map;
         },
         //清除所有标记
@@ -54,6 +57,31 @@ export default {
         },
         coverage (data) {
             // do something
+            var step = this.$store.state.searchParams.step;
+            var startLat = data[0].lat;
+            var minLng = step/(1000*111*Math.cos(startLat*Math.PI/180));// 单个栅格经度变化
+            var minLat = step/(1000*111);// 单个栅格维度变化
+            this.drawHotTangle(data,minLng,minLat);
+
+        },
+        drawHotTangle (points,minLng,minLat) {
+            for (let i=0,len=points.length;i < len;i++) {
+                var color = this.setColor(points[i].count);
+                var rectangle = new BMap.Polygon([
+                    new BMap.Point(points[i].lng,points[i].lat),
+                    new BMap.Point(points[i].lng,points[i].lat+minLat),
+                    new BMap.Point(points[i].lng+minLng,points[i].lat+minLat),
+                    new BMap.Point(points[i].lng+minLng,points[i].lat)
+                ], {strokeColor:'white', strokeWeight:0.001, strokeOpacity:0});
+                rectangle.setFillOpacity(0.5);
+                rectangle.setFillColor(color); 
+                this.map.addOverlay(rectangle);//增加矩形
+                rectangle = null; //减少引用数，减少内存占用
+            }
+            // heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":20});
+            // this.map.addOverlay(heatmapOverlay);
+            // heatmapOverlay.setDataSet({data:points,max:-20});
+
         },
         drawRectangle (searchBox,page) {
             var that = this;
@@ -119,6 +147,36 @@ export default {
                 });
                 _marker = null;  //减少引用数，减少内存占用
             }
+        },
+        setColor (value) {//由绿到红的渐变色值,百分比 value 取值 1...100  
+            //最大值为100，防止过大出现错误
+            value = parseInt(value);
+            if(value!=0) value += 120;
+            if(value > 100) value = 100; 
+            if(value < 0) value = 0; 
+            //console.log(value);
+            //var 百分之一 = (单色值范围) / 50;  单颜色的变化范围只在50%之内 
+            var one = (255+255) / 100;    
+            var r=0;  
+            var g=0;  
+            var b=0;  
+            if ( value < 50 ) {   
+                // 比例小于50的时候红色是越来越多的,直到红色为255时(红+绿)变为黄色.  
+                r = one * value; 
+                g=255; 
+            }  
+            if ( value >= 50 ) {  
+                // 比例大于50的时候绿色是越来越少的,直到0 变为纯红  
+                g =  255 - ( (value - 50 ) * one) ;  
+                r = 255;  
+            }  
+            r = parseInt(r);// 取整  
+            g = parseInt(g);// 取整  
+            b = parseInt(b);// 取整  
+            //console.log("#"+r.toString(16,2)+g.toString(16,2)+b.toString(16,2));  
+            //return "#"+r.toString(16,2)+g.toString(16,2)+b.toString(16,2);  
+            //console.log("rgb("+r+","+g+","+b+")" );  
+            return "rgb("+r+","+g+","+b+")";  
         }
     },
     mounted () {

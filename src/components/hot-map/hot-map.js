@@ -12,6 +12,7 @@ export default {
 	},
 	methods: {
 		search () {
+            var that = this;
 			// 清空弹窗和地图
             $$EventBus.$emit("clearOverlays");
             $$EventBus.$emit("hideMsg");
@@ -19,18 +20,26 @@ export default {
 			var bssw = bounds.getSouthWest();   //可视区域左下角
 			var bsne = bounds.getNorthEast();   //可视区域右上角
 
+
 			var zoom = this.$store.state.zoom;
 			var step = 12.5*Math.pow(2,18-zoom);//单位栅格边长（m）
+            var minLng = step/(1000*111*Math.cos(bssw.lat*Math.PI/180));// 单个栅格经度变化
+            var minLat = step/(1000*111);// 单个栅格维度变化
+            var startLng = bssw.lng - minLng;// 扩大查询范围，保证视野边缘部分的精度
+            var startLat = bssw.lat - minLat;
+            var endLng = bsne.lng + step*minLng;
+            var endLat = bsne.lat + step*minLat;
 
 			var params = {
-				searchBox: [bssw.lng,bssw.lat,bsne.lng,bsne.lat],
+				searchBox: [startLng,startLat,endLng,endLat],
 				corporation: that.formData.corporation,
 				system: that.formData.system,
-				maxDistance: that.formData.maxDistance
+				maxDistance: that.formData.maxDistance,
 				step: step
 			}
 			//发送请求
-			$$model.getRectangleInfo(params,function(data){
+			$$model.getCoverageInfo(params,function(data){
+
 			    that.$store.commit('storeSearchParams',params);// 存储查询参数
 			    that.$store.commit('storeSearchData',data);// 存储查询得到的数据
 			    //触发map中的监听事件,覆盖分析

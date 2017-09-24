@@ -6,9 +6,9 @@
     flex:0 0 340px;
     overflow: hidden;
     white-space:nowrap;/*不换行*/
-    height: 40px;
+    height: 30px;
     transition: height 0.3s;
-    padding: 5px;
+    padding: 10px;
 }
 
 .leftMenu:hover {
@@ -18,7 +18,7 @@
 .selectTitle {
     font-size: 20px;
     font-weight: 800;
-    margin: 10px 30px;
+    margin: 0px 30px 20px;
 }
 
 .leftMenu .form{
