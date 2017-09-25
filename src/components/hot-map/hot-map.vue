@@ -40,12 +40,12 @@
     overflow: hidden;
     white-space:nowrap;/*不换行*/
     height: 30px;
-    transition: height 0.3s;
+    transition: all 0.3s;
     padding: 10px;
 }
 
 .leftMenu:hover {
-    height: 400px;
+    height: 200px;
 }
 
 .selectTitle {

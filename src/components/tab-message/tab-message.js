@@ -6,12 +6,13 @@ export default {
             showTab: false,
             selectTab: "message",
             echarts_abbrs: [],//将要绘制echarts的属性
-            message: ""//台站信息页展示内容
+            message: [],//台站信息页展示内容
+            hasEcharts: false
         }
     },
     computed: {
         tabsWidth () {
-            return this.selectTab === "statistics"? "600px":"400px";
+            return (this.selectTab === "statistics" && this.hasEcharts)? "600px":"400px";
         }
     },
     watch: {},
@@ -21,16 +22,19 @@ export default {
             $$EventBus.$emit("clearSelect");
         },
         setMessage (params) {
-            var index = params.index;
+            var data = params.data;
             var type = params.type;
             var page = params.page;
             switch (page) {
                 case "mapRectangle":
                     if (type === "rectangle") {
-                        this.setRectangleMsg(index);
+                        this.setRectangleMsg(data);
                     } else if(type === "point") {
-                        this.setPointMsg(index);
+                        this.setPointMsg(data);
                     }
+                    break;
+                case "coverage":
+                    this.setHotMapMsg(data);
                     break;
             }
         },
@@ -115,6 +119,13 @@ export default {
 
             this.showTab = true;
         },
+        setHotMapMsg (params) {
+            this.message = ["测量点"];
+            this.message.push("经度:" + params.lng);
+            this.message.push("纬度:" + params.lat);
+            this.message.push("接收功率:" + params.count);
+            this.showTab = true;
+        },
         arrAdd (arr1,arr2) {
             var len1 = arr1.length;
             var len2 = arr2.length;
@@ -128,6 +139,7 @@ export default {
         },
         echartsMake (abbrs,data) {
             var that = this;
+            this.hasEcharts = true;
             setTimeout(function(){
                 abbrs.forEach(function(item,index){
                     var el = document.querySelector(".echarts_" + index);
@@ -211,6 +223,9 @@ export default {
         });
         $$EventBus.$on("hideMsg",function(){
             that.showTab = false;
+            that.hasEcharts = false;
+            that.message = [];
+            that.echarts_abbrs = [];
         });
     }
 }

@@ -22,19 +22,22 @@ export default {
 
 
 			var zoom = this.$store.state.zoom;
+            var maxDistance = that.formData.maxDistance;
 			var step = 12.5*Math.pow(2,18-zoom);//单位栅格边长（m）
             var minLng = step/(1000*111*Math.cos(bssw.lat*Math.PI/180));// 单个栅格经度变化
             var minLat = step/(1000*111);// 单个栅格维度变化
-            var startLng = bssw.lng - minLng;// 扩大查询范围，保证视野边缘部分的精度
-            var startLat = bssw.lat - minLat;
-            var endLng = bsne.lng + step*minLng;
-            var endLat = bsne.lat + step*minLat;
+            var numLng = Math.ceil(maxDistance/step);//单个点搜索范围经度范围
+            var numLat = Math.ceil(maxDistance/step);//单个点搜索范围纬度范围
+            var startLng = bssw.lng - numLng*minLng;// 扩大查询范围，保证视野边缘部分的精度
+            var startLat = bssw.lat - numLat*minLat;
+            var endLng = bsne.lng + numLng*minLng;
+            var endLat = bsne.lat + numLat*minLat;
 
 			var params = {
 				searchBox: [startLng,startLat,endLng,endLat],
 				corporation: that.formData.corporation,
 				system: that.formData.system,
-				maxDistance: that.formData.maxDistance,
+				maxDistance: maxDistance,
 				step: step
 			}
 			//发送请求

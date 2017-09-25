@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import $$EventBus from "../script/EventBus.js"
 import hotMap from '../components/hot-map/hot-map.vue'
 import interference from '../components/interference/interference.vue'
 import mapRectangle from '../components/map-rectangle/map-rectangle.vue'
@@ -57,6 +58,8 @@ const router = new VueRouter({
 
 router.beforeEach((to,from,next)=>{
     document.title = to.meta.title;
+    $$EventBus.$emit("clearOverlays");
+    $$EventBus.$emit("hideMsg");
     next();
 })
 

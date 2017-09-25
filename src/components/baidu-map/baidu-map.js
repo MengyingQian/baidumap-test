@@ -62,11 +62,27 @@ export default {
             var minLng = step/(1000*111*Math.cos(startLat*Math.PI/180));// 单个栅格经度变化
             var minLat = step/(1000*111);// 单个栅格维度变化
             this.drawHotTangle(data,minLng,minLat);
-
+            this.clickHotTangle("coverage");
+        },
+        clickHotTangle (page) {
+            var that = this;
+            var baiduMap = that.$refs.baiduMap;
+            //click事件冒泡
+            baiduMap.addEventListener("click", function(event){//事件委托
+                var ipath = event.target;//获取click事件目标
+                var color = ipath.getAttribute("fill");
+                var d = ipath.getAttribute("d");
+                var point = that.getHotCount(color,d);
+                $$EventBus.$emit("showMsg",{
+                    data: point,
+                    type: "rectangle",
+                    page: page
+                })//设置消息弹窗
+            });
         },
         drawHotTangle (points,minLng,minLat) {
             for (let i=0,len=points.length;i < len;i++) {
-                var color = this.setColor(points[i].count);
+                var color = this.setHotColor(points[i].count);
                 var rectangle = new BMap.Polygon([
                     new BMap.Point(points[i].lng,points[i].lat),
                     new BMap.Point(points[i].lng,points[i].lat+minLat),
@@ -81,7 +97,6 @@ export default {
             // heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":20});
             // this.map.addOverlay(heatmapOverlay);
             // heatmapOverlay.setDataSet({data:points,max:-20});
-
         },
         drawRectangle (searchBox,page) {
             var that = this;
@@ -108,7 +123,7 @@ export default {
                     that.selectRectangle.setFillColor("#00FFFF");//为本次选中的栅格增加特效
                     that.selectRectangle.setFillOpacity(0.5);
                     $$EventBus.$emit("showMsg",{
-                        index: that.selectRectangle["data-index"],
+                        data: that.selectRectangle["data-index"],
                         type: "rectangle",
                         page: page
                     })//设置消息弹窗
@@ -140,7 +155,7 @@ export default {
                     that.selectPoint = this;
                     that.selectPoint.setAnimation(BMAP_ANIMATION_BOUNCE);
                     $$EventBus.$emit("showMsg",{
-                        index: that.selectPoint["data-index"],
+                        data: that.selectPoint["data-index"],
                         type: "point",
                         page: page
                     })//设置消息弹窗
@@ -148,7 +163,8 @@ export default {
                 _marker = null;  //减少引用数，减少内存占用
             }
         },
-        setColor (value) {//由绿到红的渐变色值,百分比 value 取值 1...100  
+        setHotColor (value) {//由绿到红的渐变色值,百分比 value 取值 1...100  
+            if(!value) value = 0
             //最大值为100，防止过大出现错误
             value = parseInt(value);
             if(value!=0) value += 120;
@@ -177,6 +193,35 @@ export default {
             //return "#"+r.toString(16,2)+g.toString(16,2)+b.toString(16,2);  
             //console.log("rgb("+r+","+g+","+b+")" );  
             return "rgb("+r+","+g+","+b+")";  
+        },
+        getHotCount (color,d) {
+            var re1 = /\d{1,3}/g;
+            var r = parseInt(re1.exec(color));
+            var g = parseInt(re1.exec(color));
+            var b = parseInt(re1.exec(color));
+            var re2 = /\d{1,4}/g;
+            var x = parseInt(re2.exec(d));
+            var y = parseInt(re2.exec(d));
+            var one = (255+255) / 100;
+            var value;
+            var lng;
+            var lat;
+            if(r == 255){
+                value = (255-g)/one+50-120;
+            }
+            else{
+                value = r/one-120;
+            }
+            var bs = this.map.getBounds();   //获取可视区域
+            var bssw = bs.getSouthWest();   //可视区域左下角
+            var bsne = bs.getNorthEast();   //可视区域右上角
+            lng = (bsne.lng-bssw.lng)/1440*x+bssw.lng;
+            lat = (bsne.lat-bssw.lat)/767*y+bssw.lat;
+            return {
+                lng: lng,
+                lat: lat,
+                count: value
+            };
         }
     },
     mounted () {
