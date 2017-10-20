@@ -136,7 +136,8 @@ export default {
             var color = 0;
             var that = this;
             for (var i = 0,len = baseInfo.length;i < len; i++) {
-                var myIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png", new BMap.Size(23, 25), {  
+                // http://api.map.baidu.com/img/markers.png
+                var myIcon = new BMap.Icon("static/markers.png", new BMap.Size(23, 25), {  
                                 offset: new BMap.Size(10, 25), // 指定定位位置  
                                 imageOffset: new BMap.Size(0, 0-color*25 ) // 设置图片偏移  
                             }); 

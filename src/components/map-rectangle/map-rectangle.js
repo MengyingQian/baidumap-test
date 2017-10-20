@@ -12,8 +12,12 @@ export default {
                 isAverage: true
             },
             Maxtime: "",
-            Mintime: ""
+            Mintime: "",
+            systemOptions: {}
         }
+    },
+    watch: {
+       corporation: function (newVal) {}
     },
     methods: {
         formatDate (day) {
