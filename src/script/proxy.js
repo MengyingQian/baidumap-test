@@ -7,6 +7,9 @@ function getPoxy (type,params,fn) {
         case "getCoverageInfo":
             result = require("./proxy/getCoverageInfo.js");
             break;
+        case "getInterferenceInfo":
+            result = require("./proxy/getInterferenceInfo.js");
+            break;
     }
     result(params,fn);
 }

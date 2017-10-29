@@ -6,6 +6,9 @@ var model = {
     },
     getCoverageInfo (params,fn) {
         proxy("getCoverageInfo",params,fn);
+    },
+    getInterferenceInfo (params,fn) {
+    	proxy("getInterferenceInfo",params,fn);
     }
 }
 export default model

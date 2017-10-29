@@ -64,6 +64,9 @@ export default {
             this.drawHotTangle(data,minLng,minLat);
             this.clickHotTangle("coverage");
         },
+        interference (data) {
+            
+        },
         clickHotTangle (page) {
             var that = this;
             var baiduMap = that.$refs.baiduMap;
@@ -254,8 +257,12 @@ export default {
             that.mapRectangle.call(that,data)
         });
         // 监听覆盖分析
-        $$EventBus.$on("coverage",function(data,isAverage){
-            that.coverage.call(that,data,isAverage)
+        $$EventBus.$on("coverage",function(data){
+            that.coverage.call(that,data)
+        });
+        // 监听干扰分析
+        $$EventBus.$on("interference",function(data){
+            that.interference.call(that,data)
         });
     }
 }
