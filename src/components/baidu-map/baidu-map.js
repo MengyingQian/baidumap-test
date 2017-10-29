@@ -7,7 +7,8 @@ export default {
             map: {},
             rectangleArr: [],
             selectRectangle: null,
-            selectPoint: null
+            selectPoint: null,
+            oldRePoint: []
         }
     },
     computed: {
@@ -53,7 +54,7 @@ export default {
         mapRectangle (data) { // mapRactangle页面调用
             var that = this;
             that.drawRectangle(data.searchBox,"mapRectangle");//绘制矩形
-            that.drawPoint(data.baseInfo,"mapRectangle")
+            that.drawPoint(data.baseInfo,"mapRectangle");
         },
         coverage (data) {
             // do something
@@ -64,8 +65,13 @@ export default {
             this.drawHotTangle(data,minLng,minLat);
             this.clickHotTangle("coverage");
         },
+        resourceRate (data) {
+            var that = this;
+            that.drawPoint(data.baseInfo,"resourceRate");
+        },
         interference (data) {
-            
+            var that = this;
+            that.drawPoint(data.baseInfo,"interference");
         },
         clickHotTangle (page) {
             var that = this;
@@ -140,6 +146,7 @@ export default {
             var that = this;
             for (var i = 0,len = baseInfo.length;i < len; i++) {
                 // http://api.map.baidu.com/img/markers.png
+                var color = parseInt(baseInfo[i]['干扰系数']/0.1)||0;
                 var myIcon = new BMap.Icon("static/markers.png", new BMap.Size(23, 25), {  
                                 offset: new BMap.Size(10, 25), // 指定定位位置  
                                 imageOffset: new BMap.Size(0, 0-color*25 ) // 设置图片偏移  
@@ -158,6 +165,9 @@ export default {
                     }
                     that.selectPoint = this;
                     that.selectPoint.setAnimation(BMAP_ANIMATION_BOUNCE);
+                    if (page === "interference") {
+                        that.addReMarker(that.selectPoint["data-index"]);
+                    }
                     $$EventBus.$emit("showMsg",{
                         data: that.selectPoint["data-index"],
                         type: "point",
@@ -231,6 +241,31 @@ export default {
                 lat: lat,
                 count: value
             };
+        },
+        // 设置关联基站点样式
+        addReMarker(index){
+            var that = this;
+            var data = that.$store.state.searchData.baseInfo[index];
+            if(that.oldRePoint.length){
+                that.oldRePoint.map(function(marker){
+                    that.map.removeOverlay(marker);
+                })
+                that.map.removeOverlay(that.oldRePoint);
+                that.oldRePoint = [];
+            } 
+            for(var i=0;i<data.rePoints.length;i=i+2){
+                if(data.rePoints[i]==0) break;
+                var myIcon = new BMap.Icon("static/markers.png", new BMap.Size(23, 25), {  
+                                offset: new BMap.Size(10, 25), // 指定定位位置  
+                                imageOffset: new BMap.Size(0, 0-10*25 ) // 设置图片偏移  
+                            });
+                var marker = new BMap.Marker(new BMap.Point(data.rePoints[i], data.rePoints[i+1]),{icon:myIcon});
+                that.oldRePoint.push(marker);
+                that.map.addOverlay(marker);
+                //设置文字标签
+                var label = new BMap.Label(data.rePoints[i]+","+data.rePoints[i+1],{offset:new BMap.Size(20,-10)});
+                marker.setLabel(label);
+            }
         }
     },
     mounted () {
@@ -263,6 +298,10 @@ export default {
         // 监听干扰分析
         $$EventBus.$on("interference",function(data){
             that.interference.call(that,data)
+        });
+        // 监听资源利用率分析
+        $$EventBus.$on("resourceRate",function(data){
+            that.resourceRate.call(that,data)
         });
     }
 }

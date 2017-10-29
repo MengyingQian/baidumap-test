@@ -9,6 +9,9 @@ var model = {
     },
     getInterferenceInfo (params,fn) {
     	proxy("getInterferenceInfo",params,fn);
+    },
+    getResoureceRateInfo (params,fn) {
+    	proxy("getResoureceRateInfo",params,fn);
     }
 }
 export default model

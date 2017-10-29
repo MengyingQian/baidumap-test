@@ -10,6 +10,9 @@ function getPoxy (type,params,fn) {
         case "getInterferenceInfo":
             result = require("./proxy/getInterferenceInfo.js");
             break;
+        case "getResoureceRateInfo":
+            result = require("./proxy/getResoureceRateInfo.js");
+            break;
     }
     result(params,fn);
 }
