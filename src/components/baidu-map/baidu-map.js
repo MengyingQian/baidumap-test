@@ -195,14 +195,15 @@ export default {
             //console.log("rgb("+r+","+g+","+b+")" );  
             return "rgb("+r+","+g+","+b+")";  
         },
+        // 纬度计算偏差较大
         getHotCount (color,d) {
             var re1 = /\d{1,3}/g;
             var r = parseInt(re1.exec(color));
             var g = parseInt(re1.exec(color));
             var b = parseInt(re1.exec(color));
-            var re2 = /\d{1,4}/g;
-            var x = parseInt(re2.exec(d));
-            var y = parseInt(re2.exec(d));
+            var re2 = /\s(\d*)\s/g;
+            var x = parseInt(re2.exec(d)[0]);
+            var y = parseInt(re2.exec(d)[0]);
             var one = (255+255) / 100;
             var value;
             var lng;
@@ -216,8 +217,12 @@ export default {
             var bs = this.map.getBounds();   //获取可视区域
             var bssw = bs.getSouthWest();   //可视区域左下角
             var bsne = bs.getNorthEast();   //可视区域右上角
-            lng = (bsne.lng-bssw.lng)/1440*x+bssw.lng;
-            lat = (bsne.lat-bssw.lat)/767*y+bssw.lat;
+
+            var mapwidth = this.$refs.baiduMap.clientWidth;
+            var mapHeight = this.$refs.baiduMap.clientHeight;
+
+            lng = (bsne.lng-bssw.lng)/mapwidth*x+bssw.lng;
+            lat = (bsne.lat-bssw.lat)/mapHeight*y+bssw.lat;
             return {
                 lng: lng,
                 lat: lat,
@@ -245,8 +250,8 @@ export default {
             }
         });
         // 监听栅格
-        $$EventBus.$on("mapRectangle",function(data,isAverage){
-            that.mapRectangle.call(that,data,isAverage)
+        $$EventBus.$on("mapRectangle",function(data){
+            that.mapRectangle.call(that,data)
         });
         // 监听覆盖分析
         $$EventBus.$on("coverage",function(data,isAverage){

@@ -79,6 +79,10 @@ export default {
             var searchParams = this.$store.state.searchParams;
             var searchBox = this.$store.state.searchData.searchBox;
             var baseInfo = this.$store.state.searchData.baseInfo;
+            var startLng = searchBox[index][0];
+            var startLat = searchBox[index][1];
+            var endLng = searchBox[index][2];
+            var endLat = searchBox[index][3];
             var sum = { //统计栅格内所有基站信息
                 num: 0,
                 "业务时间": baseInfo[0]["业务时间"]
@@ -98,7 +102,10 @@ export default {
                     break;
             }
             for (var i=0,len=baseInfo.length;i<len;i++) {
-                if (baseInfo[i].recIndex === index) {
+                var lng = baseInfo[i]["geom"].coordinates[0];
+                var lat = baseInfo[i]["geom"].coordinates[1];
+                if (lng >= startLng && lng < endLng && lat >= startLat && lat < endLat) {
+                // if (index === baseInfo[i].recIndex) {
                     sum.num++;
                     this.echarts_abbrs.forEach(function(item){
                         sum[item] = [];
