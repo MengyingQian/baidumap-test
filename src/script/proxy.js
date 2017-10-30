@@ -13,6 +13,9 @@ function getPoxy (type,params,fn) {
         case "getResoureceRateInfo":
             result = require("./proxy/getResoureceRateInfo.js");
             break;
+        case "getNetworkLayoutInfo":
+            result = require("./proxy/getNetworkLayoutInfo.js");
+            break;
     }
     result(params,fn);
 }

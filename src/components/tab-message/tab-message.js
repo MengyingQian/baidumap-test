@@ -86,7 +86,30 @@ export default {
                 case "resourceRate":
                     this.setResourceRateMsg(data);
                     break;
+                case "networkLayout":
+                    this.setNetworkLayoutMsg(data);
+                    break;
+                default:
+                    break;
             }
+        },
+        setNetworkLayoutMsg (index) {
+            var that = this;
+            var baseInfo = that.$store.state.searchData.baseInfo[index];
+            that.message = [];
+            var keys = Object.getOwnPropertyNames(baseInfo);
+            var ignoreAbbrs = ["_id","编号","rePoints","__ob__","小区半径","基站布局","基站站高","rePoints"].concat(this.echarts_abbrs);//不予显示的属性组
+            keys.forEach(function(item){
+                if (!Array.isArray(baseInfo[item])&&ignoreAbbrs.indexOf(item) ===-1) {
+                    if (item === "geom") {
+                        that.message.push("经度:" + baseInfo["geom"].coordinates[0]);
+                        that.message.push("纬度:" + baseInfo["geom"].coordinates[1]);
+                    } else {
+                        that.message.push(item + ":" + baseInfo[item]);
+                    }
+                }
+            })
+            that.showTab = true;
         },
         setResourceRateMsg (index) {
             var that = this;
@@ -94,25 +117,7 @@ export default {
             var searchParams = this.$store.state.searchParams;
             var baseInfo = this.$store.state.searchData.baseInfo[index];
             this.message = [];
-            switch (searchParams.service) {
-                case "all":
-                    this.echarts_abbrs = ["语音数据(分钟)","短信数据(条数)","LTE上行总流量(MByte)","LTE下行总流量(MByte)"];//获取所有应该展示的属性
-                    break;
-                case "voice":
-                    this.echarts_abbrs = ["语音数据(分钟)"];
-                    break;
-                case "note":
-                    this.echarts_abbrs = ["短信数据(条数)"];
-                    break;
-                case "all":
-                    this.echarts_abbrs = ["LTE上行总流量(MByte)","LTE下行总流量(MByte)"];
-                    break;
-                case "rate":
-                    this.echarts_abbrs = ['LTE_无线利用率(新)(%)','LTE_上行PRB平均利用率(新)(%)','LTE_下行PRB平均利用率(新)(%)'];
-                    break;
-                default:
-                    break;
-            }
+            this.echarts_abbrs = ['LTE_无线利用率(新)(%)','LTE_上行PRB平均利用率(新)(%)','LTE_下行PRB平均利用率(新)(%)'];
             this.echartsMake(this.echarts_abbrs,baseInfo);//绘制echarts图
             var ignoreAbbrs = ["_id","编号",'LTE_无线利用率相关性()','LTE_上行PRB平均利用率相关性()','LTE_下行PRB平均利用率相关性()',"__ob__"].concat(this.echarts_abbrs);//不予显示的属性组
             var keys = Object.getOwnPropertyNames(baseInfo);

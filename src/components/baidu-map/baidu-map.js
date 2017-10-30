@@ -8,6 +8,7 @@ export default {
             rectangleArr: [],
             selectRectangle: null,
             selectPoint: null,
+            oldHexagon: null,
             oldRePoint: []
         }
     },
@@ -72,6 +73,10 @@ export default {
         interference (data) {
             var that = this;
             that.drawPoint(data.baseInfo,"interference");
+        },
+        networkLayout (data) {
+            var that = this;
+            that.drawPoint(data.baseInfo,"networkLayout");
         },
         clickHotTangle (page) {
             var that = this;
@@ -142,11 +147,15 @@ export default {
             }
         },
         drawPoint (baseInfo,page) {// 绘制基站点
-            var color = 0;
             var that = this;
             for (var i = 0,len = baseInfo.length;i < len; i++) {
                 // http://api.map.baidu.com/img/markers.png
-                var color = parseInt(baseInfo[i]['干扰系数']/0.1)||0;
+                var color = 0;
+                if (page === "interference") {
+                    color = parseInt(baseInfo[i]['干扰系数']/0.1)
+                } else if (page === "networkLayout") {
+                    color = (baseInfo[i]["基站布局"] + baseInfo[i]["基站站高"])*2;// 此两部分取值为0或1，0为正常，1为异常
+                }
                 var myIcon = new BMap.Icon("static/markers.png", new BMap.Size(23, 25), {  
                                 offset: new BMap.Size(10, 25), // 指定定位位置  
                                 imageOffset: new BMap.Size(0, 0-color*25 ) // 设置图片偏移  
@@ -167,6 +176,10 @@ export default {
                     that.selectPoint.setAnimation(BMAP_ANIMATION_BOUNCE);
                     if (page === "interference") {
                         that.addReMarker(that.selectPoint["data-index"]);
+                    }
+                    if (page === "networkLayout") {
+                        that.addReMarker(that.selectPoint["data-index"]);
+                        that.hexagon(that.selectPoint["data-index"]);
                     }
                     $$EventBus.$emit("showMsg",{
                         data: that.selectPoint["data-index"],
@@ -254,7 +267,7 @@ export default {
                 that.oldRePoint = [];
             } 
             for(var i=0;i<data.rePoints.length;i=i+2){
-                if(data.rePoints[i]==0) break;
+                if(data.rePoints[i] === 0) break;
                 var myIcon = new BMap.Icon("static/markers.png", new BMap.Size(23, 25), {  
                                 offset: new BMap.Size(10, 25), // 指定定位位置  
                                 imageOffset: new BMap.Size(0, 0-10*25 ) // 设置图片偏移  
@@ -266,6 +279,30 @@ export default {
                 var label = new BMap.Label(data.rePoints[i]+","+data.rePoints[i+1],{offset:new BMap.Size(20,-10)});
                 marker.setLabel(label);
             }
+        },
+        hexagon (index) {
+            var that = this;
+            var data = that.$store.state.searchData.baseInfo[index];
+            var lng = data.geom.coordinates[0];
+            var lat = data.geom.coordinates[1];
+            var L = data['小区半径'];
+            if(that.oldHexagon){
+                that.map.removeOverlay(that.oldHexagon);
+            } 
+            var polygon = new BMap.Polygon([
+            new BMap.Point(lng-0.0000117*L,lat),
+            new BMap.Point(lng-0.0000117*L/2,lat+0.000009*L*Math.sqrt(3)/2),
+            new BMap.Point(lng+0.0000117*L/2,lat+0.000009*L*Math.sqrt(3)/2),  
+            new BMap.Point(lng+0.0000117*L,lat),
+
+            new BMap.Point(lng+0.0000117*L/2,lat-0.000009*L*Math.sqrt(3)/2),
+
+            new BMap.Point(lng-0.0000117*L/2,lat-0.000009*L*Math.sqrt(3)/2),
+
+            new BMap.Point(lng-0.0000117*L,lat),
+            ], {strokeColor:"red", strokeWeight:2, strokeOpacity:0.5});   //创建正六边形
+            that.map.addOverlay(polygon);
+            that.oldHexagon = polygon;
         }
     },
     mounted () {
@@ -302,6 +339,10 @@ export default {
         // 监听资源利用率分析
         $$EventBus.$on("resourceRate",function(data){
             that.resourceRate.call(that,data)
+        });
+        // 监听资源利用率分析
+        $$EventBus.$on("networkLayout",function(data){
+            that.networkLayout.call(that,data)
         });
     }
 }
