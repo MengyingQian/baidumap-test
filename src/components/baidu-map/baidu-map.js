@@ -7,7 +7,9 @@ export default {
             map: {},
             rectangleArr: [],
             selectRectangle: null,
-            selectPoint: null
+            selectPoint: null,
+            oldHexagon: null,
+            oldRePoint: []
         }
     },
     computed: {
@@ -53,7 +55,7 @@ export default {
         mapRectangle (data) { // mapRactangle页面调用
             var that = this;
             that.drawRectangle(data.searchBox,"mapRectangle");//绘制矩形
-            that.drawPoint(data.baseInfo,"mapRectangle")
+            that.drawPoint(data.baseInfo,"mapRectangle");
         },
         coverage (data) {
             // do something
@@ -64,8 +66,17 @@ export default {
             this.drawHotTangle(data,minLng,minLat);
             this.clickHotTangle("coverage");
         },
+        resourceRate (data) {
+            var that = this;
+            that.drawPoint(data.baseInfo,"resourceRate");
+        },
         interference (data) {
-            
+            var that = this;
+            that.drawPoint(data.baseInfo,"interference");
+        },
+        networkLayout (data) {
+            var that = this;
+            that.drawPoint(data.baseInfo,"networkLayout");
         },
         clickHotTangle (page) {
             var that = this;
@@ -136,10 +147,15 @@ export default {
             }
         },
         drawPoint (baseInfo,page) {// 绘制基站点
-            var color = 0;
             var that = this;
             for (var i = 0,len = baseInfo.length;i < len; i++) {
                 // http://api.map.baidu.com/img/markers.png
+                var color = 0;
+                if (page === "interference") {
+                    color = parseInt(baseInfo[i]['干扰系数']/0.1)
+                } else if (page === "networkLayout") {
+                    color = (baseInfo[i]["基站布局"] + baseInfo[i]["基站站高"])*2;// 此两部分取值为0或1，0为正常，1为异常
+                }
                 var myIcon = new BMap.Icon("static/markers.png", new BMap.Size(23, 25), {  
                                 offset: new BMap.Size(10, 25), // 指定定位位置  
                                 imageOffset: new BMap.Size(0, 0-color*25 ) // 设置图片偏移  
@@ -158,6 +174,13 @@ export default {
                     }
                     that.selectPoint = this;
                     that.selectPoint.setAnimation(BMAP_ANIMATION_BOUNCE);
+                    if (page === "interference") {
+                        that.addReMarker(that.selectPoint["data-index"]);
+                    }
+                    if (page === "networkLayout") {
+                        that.addReMarker(that.selectPoint["data-index"]);
+                        that.hexagon(that.selectPoint["data-index"]);
+                    }
                     $$EventBus.$emit("showMsg",{
                         data: that.selectPoint["data-index"],
                         type: "point",
@@ -198,14 +221,15 @@ export default {
             //console.log("rgb("+r+","+g+","+b+")" );  
             return "rgb("+r+","+g+","+b+")";  
         },
+        // 纬度计算偏差较大
         getHotCount (color,d) {
             var re1 = /\d{1,3}/g;
             var r = parseInt(re1.exec(color));
             var g = parseInt(re1.exec(color));
             var b = parseInt(re1.exec(color));
-            var re2 = /\d{1,4}/g;
-            var x = parseInt(re2.exec(d));
-            var y = parseInt(re2.exec(d));
+            var re2 = /\s(\d*)\s/g;
+            var x = parseInt(re2.exec(d)[0]);
+            var y = parseInt(re2.exec(d)[0]);
             var one = (255+255) / 100;
             var value;
             var lng;
@@ -219,13 +243,66 @@ export default {
             var bs = this.map.getBounds();   //获取可视区域
             var bssw = bs.getSouthWest();   //可视区域左下角
             var bsne = bs.getNorthEast();   //可视区域右上角
-            lng = (bsne.lng-bssw.lng)/1440*x+bssw.lng;
-            lat = (bsne.lat-bssw.lat)/767*y+bssw.lat;
+
+            var mapwidth = this.$refs.baiduMap.clientWidth;
+            var mapHeight = this.$refs.baiduMap.clientHeight;
+
+            lng = (bsne.lng-bssw.lng)/mapwidth*x+bssw.lng;
+            lat = (bsne.lat-bssw.lat)/mapHeight*y+bssw.lat;
             return {
                 lng: lng,
                 lat: lat,
                 count: value
             };
+        },
+        // 设置关联基站点样式
+        addReMarker(index){
+            var that = this;
+            var data = that.$store.state.searchData.baseInfo[index];
+            if(that.oldRePoint.length){
+                that.oldRePoint.map(function(marker){
+                    that.map.removeOverlay(marker);
+                })
+                that.map.removeOverlay(that.oldRePoint);
+                that.oldRePoint = [];
+            } 
+            for(var i=0;i<data.rePoints.length;i=i+2){
+                if(data.rePoints[i] === 0) break;
+                var myIcon = new BMap.Icon("static/markers.png", new BMap.Size(23, 25), {  
+                                offset: new BMap.Size(10, 25), // 指定定位位置  
+                                imageOffset: new BMap.Size(0, 0-10*25 ) // 设置图片偏移  
+                            });
+                var marker = new BMap.Marker(new BMap.Point(data.rePoints[i], data.rePoints[i+1]),{icon:myIcon});
+                that.oldRePoint.push(marker);
+                that.map.addOverlay(marker);
+                //设置文字标签
+                var label = new BMap.Label(data.rePoints[i]+","+data.rePoints[i+1],{offset:new BMap.Size(20,-10)});
+                marker.setLabel(label);
+            }
+        },
+        hexagon (index) {
+            var that = this;
+            var data = that.$store.state.searchData.baseInfo[index];
+            var lng = data.geom.coordinates[0];
+            var lat = data.geom.coordinates[1];
+            var L = data['小区半径'];
+            if(that.oldHexagon){
+                that.map.removeOverlay(that.oldHexagon);
+            } 
+            var polygon = new BMap.Polygon([
+            new BMap.Point(lng-0.0000117*L,lat),
+            new BMap.Point(lng-0.0000117*L/2,lat+0.000009*L*Math.sqrt(3)/2),
+            new BMap.Point(lng+0.0000117*L/2,lat+0.000009*L*Math.sqrt(3)/2),  
+            new BMap.Point(lng+0.0000117*L,lat),
+
+            new BMap.Point(lng+0.0000117*L/2,lat-0.000009*L*Math.sqrt(3)/2),
+
+            new BMap.Point(lng-0.0000117*L/2,lat-0.000009*L*Math.sqrt(3)/2),
+
+            new BMap.Point(lng-0.0000117*L,lat),
+            ], {strokeColor:"red", strokeWeight:2, strokeOpacity:0.5});   //创建正六边形
+            that.map.addOverlay(polygon);
+            that.oldHexagon = polygon;
         }
     },
     mounted () {
@@ -258,6 +335,14 @@ export default {
         // 监听干扰分析
         $$EventBus.$on("interference",function(data){
             that.interference.call(that,data)
+        });
+        // 监听资源利用率分析
+        $$EventBus.$on("resourceRate",function(data){
+            that.resourceRate.call(that,data)
+        });
+        // 监听资源利用率分析
+        $$EventBus.$on("networkLayout",function(data){
+            that.networkLayout.call(that,data)
         });
     }
 }
