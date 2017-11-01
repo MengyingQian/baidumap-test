@@ -61,8 +61,6 @@
 
 .tab-content {
     width: 600px;
-    min-height: 500px;
-    max-height: 0.8vh;
     overflow-x: auto;/*横向拉条*/
     overflow-y: auto;/*纵向拉条*/
     word-break: keep-all;/*不换行*/
@@ -71,12 +69,25 @@
     background: #ECF0F1;
 }
 
+@media (max-height: 650px) {
+    .tab-content {
+        height: 345px;
+    }
+}
+
+@media (min-height: 750px) {
+    .tab-content {
+        min-height: 500px;
+        max-height: 0.8vh;
+    }
+}
+
 .tabs {
     transition: all 0.5s;
 }
 
 .message,.others {
-    padding: 10px 10px 0 10px;
+    padding: 0 10px;
     font-family: arial,​tahoma,​宋体;
     font-size: 16px;
 }
