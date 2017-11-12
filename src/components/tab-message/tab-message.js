@@ -117,9 +117,9 @@ export default {
             var searchParams = this.$store.state.searchParams;
             var baseInfo = this.$store.state.searchData.baseInfo[index];
             this.message = [];
-            this.echarts_abbrs = ['LTE_无线利用率(新)(%)','LTE_上行PRB平均利用率(新)(%)','LTE_下行PRB平均利用率(新)(%)'];
+            this.echarts_abbrs = ['LTE_无线利用率相关性()','LTE_上行PRB平均利用率相关性()','LTE_下行PRB平均利用率相关性()'];
             this.echartsMake(this.echarts_abbrs,baseInfo);//绘制echarts图
-            var ignoreAbbrs = ["_id","编号",'LTE_无线利用率相关性()','LTE_上行PRB平均利用率相关性()','LTE_下行PRB平均利用率相关性()',"__ob__"].concat(this.echarts_abbrs);//不予显示的属性组
+            var ignoreAbbrs = ["_id","编号",'LTE_无线利用率(新)(%)','LTE_上行PRB平均利用率(新)(%)','LTE_下行PRB平均利用率(新)(%)',"__ob__"].concat(this.echarts_abbrs);//不予显示的属性组
             var keys = Object.getOwnPropertyNames(baseInfo);
             keys.forEach(function(item){
                 if (!Array.isArray(baseInfo[item])&&ignoreAbbrs.indexOf(item) ===-1) {

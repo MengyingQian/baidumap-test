@@ -84,6 +84,7 @@ export default {
             //click事件冒泡
             baiduMap.addEventListener("click", function(event){//事件委托
                 var ipath = event.target;//获取click事件目标
+                // console.log(ipath)
                 var color = ipath.getAttribute("fill");
                 var d = ipath.getAttribute("d");
                 var point = that.getHotCount(color,d);
@@ -227,9 +228,9 @@ export default {
             var r = parseInt(re1.exec(color));
             var g = parseInt(re1.exec(color));
             var b = parseInt(re1.exec(color));
-            var re2 = /\s(\d*)\s/g;
-            var x = parseInt(re2.exec(d)[0]);
-            var y = parseInt(re2.exec(d)[0]);
+            var arr = d.split(" ");
+            var x = parseInt(arr[1]);
+            var y = parseInt(arr[2]);
             var one = (255+255) / 100;
             var value;
             var lng;
@@ -249,6 +250,8 @@ export default {
 
             lng = (bsne.lng-bssw.lng)/mapwidth*x+bssw.lng;
             lat = (bsne.lat-bssw.lat)/mapHeight*y+bssw.lat;
+            // console.log(x,y)
+            // console.log(lng,lat)
             return {
                 lng: lng,
                 lat: lat,
