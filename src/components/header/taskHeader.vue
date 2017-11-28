@@ -17,7 +17,7 @@ export default{
         return {
             name:"宽带无线通信业务评估分析与展示系统",
             pages: [
-                {name:"栅格展示",urlName:"map-rectangle",select: false},
+                {name:"业务量分析",urlName:"map-rectangle",select: false},
                 {name:"资源利用率",urlName:"resource-rate",select: false},
                 {name:"覆盖分析",urlName:"hot-map",select: false},
                 {name:"网络布局",urlName:"network-layout",select: false},

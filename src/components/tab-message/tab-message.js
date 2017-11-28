@@ -7,7 +7,51 @@ export default {
             selectTab: "message",
             echarts_abbrs: [],//将要绘制echarts的属性
             message: [],//台站信息页展示内容
-            hasEcharts: false
+            hasEcharts: false,
+            colorTableShow: false,//色块是否显示
+            colorTable: [
+                {
+                    color: "#ED2D2D",
+                    text: "0.0-0.1"
+                },
+                {
+                    color: "#FF49A3",
+                    text: "0.1-0.2"
+                },
+                {
+                    color: "#F79F27",
+                    text: "0.2-0.3"
+                },
+                {
+                    color: "#E1E51A",
+                    text: "0.3-0.4"
+                },
+                {
+                    color: "#37FF1D",
+                    text: "0.4-0.5"
+                },
+                {
+                    color: "#269022",
+                    text: "0.5-0.6"
+                },
+                {
+                    color: "#38E2DB",
+                    text: "0.6-0.7"
+                },
+                {
+                    color: "#792F1D",
+                    text: "0.7-0.8"
+                },
+                {
+                    color: "#9A1CD9",
+                    text: "0.8-0.9"
+                },
+                {
+                    color: "#9A7A7A",
+                    text: "0.9-1.0"
+                }
+            ],
+            interNum: 0
         }
     },
     computed: {
@@ -36,7 +80,78 @@ export default {
                 case "coverage":
                     this.setHotMapMsg(data);
                     break;
+                case "interference":
+                    this.setInterferenceMsg(data);
+                    break;
+                case "resourceRate":
+                    this.setResourceRateMsg(data);
+                    break;
+                case "networkLayout":
+                    this.setNetworkLayoutMsg(data);
+                    break;
+                default:
+                    break;
             }
+        },
+        setNetworkLayoutMsg (index) {
+            var that = this;
+            var baseInfo = that.$store.state.searchData.baseInfo[index];
+            that.message = [];
+            var keys = Object.getOwnPropertyNames(baseInfo);
+            var ignoreAbbrs = ["_id","编号","rePoints","__ob__","小区半径","基站布局","基站站高","rePoints"].concat(this.echarts_abbrs);//不予显示的属性组
+            keys.forEach(function(item){
+                if (!Array.isArray(baseInfo[item])&&ignoreAbbrs.indexOf(item) ===-1) {
+                    if (item === "geom") {
+                        that.message.push("经度:" + baseInfo["geom"].coordinates[0]);
+                        that.message.push("纬度:" + baseInfo["geom"].coordinates[1]);
+                    } else {
+                        that.message.push(item + ":" + baseInfo[item]);
+                    }
+                }
+            })
+            that.showTab = true;
+        },
+        setResourceRateMsg (index) {
+            var that = this;
+            this.echarts_abbrs = [];//echarts绘图列表设为空
+            var searchParams = this.$store.state.searchParams;
+            var baseInfo = this.$store.state.searchData.baseInfo[index];
+            this.message = [];
+            this.echarts_abbrs = ['LTE_无线利用率相关性()','LTE_上行PRB平均利用率相关性()','LTE_下行PRB平均利用率相关性()'];
+            this.echartsMake(this.echarts_abbrs,baseInfo);//绘制echarts图
+            var ignoreAbbrs = ["_id","编号",'LTE_无线利用率(新)(%)','LTE_上行PRB平均利用率(新)(%)','LTE_下行PRB平均利用率(新)(%)',"__ob__"].concat(this.echarts_abbrs);//不予显示的属性组
+            var keys = Object.getOwnPropertyNames(baseInfo);
+            keys.forEach(function(item){
+                if (!Array.isArray(baseInfo[item])&&ignoreAbbrs.indexOf(item) ===-1) {
+                    if (item === "geom") {
+                        that.message.push("经度:" + baseInfo["geom"].coordinates[0]);
+                        that.message.push("纬度:" + baseInfo["geom"].coordinates[1]);
+                    } else {
+                        that.message.push(item + ":" + baseInfo[item]);
+                    }
+                }
+            })
+            that.showTab = true;
+        },
+        setInterferenceMsg (index) {
+            var that = this;
+            var baseInfo = that.$store.state.searchData.baseInfo[index];
+            that.message = [];
+            var keys = Object.getOwnPropertyNames(baseInfo);
+            var ignoreAbbrs = ["_id","编号","rePoints","__ob__","干扰系数"].concat(this.echarts_abbrs);//不予显示的属性组
+            keys.forEach(function(item){
+                if (!Array.isArray(baseInfo[item])&&ignoreAbbrs.indexOf(item) ===-1) {
+                    if (item === "geom") {
+                        that.message.push("经度:" + baseInfo["geom"].coordinates[0]);
+                        that.message.push("纬度:" + baseInfo["geom"].coordinates[1]);
+                    } else {
+                        that.message.push(item + ":" + baseInfo[item]);
+                    }
+                }
+            })
+            this.interNum = baseInfo["干扰系数"];
+            this.colorTableShow = true;
+            that.showTab = true;
         },
         setPointMsg (index) {
             var that = this;
@@ -79,6 +194,10 @@ export default {
             var searchParams = this.$store.state.searchParams;
             var searchBox = this.$store.state.searchData.searchBox;
             var baseInfo = this.$store.state.searchData.baseInfo;
+            var startLng = searchBox[index][0];
+            var startLat = searchBox[index][1];
+            var endLng = searchBox[index][2];
+            var endLat = searchBox[index][3];
             var sum = { //统计栅格内所有基站信息
                 num: 0,
                 "业务时间": baseInfo[0]["业务时间"]
@@ -98,7 +217,10 @@ export default {
                     break;
             }
             for (var i=0,len=baseInfo.length;i<len;i++) {
-                if (baseInfo[i].recIndex === index) {
+                var lng = baseInfo[i]["geom"].coordinates[0];
+                var lat = baseInfo[i]["geom"].coordinates[1];
+                if (lng >= startLng && lng < endLng && lat >= startLat && lat < endLat) {
+                // if (index === baseInfo[i].recIndex) {
                     sum.num++;
                     this.echarts_abbrs.forEach(function(item){
                         sum[item] = [];
@@ -196,7 +318,7 @@ export default {
                             yAxis: {
                                 type : 'value',
                                 name: abbr.yName,
-                                scale: true
+                                scale: false
                             },
                             series: [{
                                 name: abbr.title,
@@ -224,6 +346,7 @@ export default {
         $$EventBus.$on("hideMsg",function(){
             that.showTab = false;
             that.hasEcharts = false;
+            that.colorTableShow = false;
             that.message = [];
             that.echarts_abbrs = [];
         });

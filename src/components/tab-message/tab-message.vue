@@ -13,6 +13,14 @@
             </div>
             <div class="tab-content statistics" v-show="selectTab === 'statistics'" ref="statistics">
                 <div v-for="(item,index) in echarts_abbrs" :class="['echarts_'+index,hasEcharts?'echarts':'']"></div>
+                <div v-if="colorTableShow" class="colorTable">
+                    <p class="interNum">本基站干扰系数：{{interNum}}</p>
+                    <span class="colorTitle">颜色图例</span>
+                    <div class="colorContent" v-for="item in colorTable">
+                        <p class="colorLump" :style="{backgroundColor: item.color}"></p>
+                        <p class="colorText">{{item.text}}</p>
+                    </div>
+                </div>
             </div>
             <div class="tab-content others" v-show="selectTab === 'others'"></div>  
         </div>
@@ -61,8 +69,6 @@
 
 .tab-content {
     width: 600px;
-    min-height: 500px;
-    max-height: 0.8vh;
     overflow-x: auto;/*横向拉条*/
     overflow-y: auto;/*纵向拉条*/
     word-break: keep-all;/*不换行*/
@@ -71,12 +77,25 @@
     background: #ECF0F1;
 }
 
+@media (max-height: 650px) {
+    .tab-content {
+        height: 345px;
+    }
+}
+
+@media (min-height: 750px) {
+    .tab-content {
+        min-height: 500px;
+        max-height: 0.8vh;
+    }
+}
+
 .tabs {
     transition: all 0.5s;
 }
 
 .message,.others {
-    padding: 10px 10px 0 10px;
+    padding: 0 10px;
     font-family: arial,​tahoma,​宋体;
     font-size: 16px;
 }
@@ -85,6 +104,22 @@
     width: 550px;
     height: 500px;
     margin: 30px 0;
+}
+
+.colorTable {
+    margin-left: 20px;
+}
+
+.colorLump {
+    display: inline-block;
+    width: 50px;
+    height: 20px;
+    margin: 0 20px 0 0;
+}
+
+.colorText {
+    display: inline-block;
+    vertical-align: center;
 }
 
 .tab-content::-webkit-scrollbar {
